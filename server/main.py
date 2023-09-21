@@ -1,6 +1,6 @@
 import random
+import pickle
 import re
-
 from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
@@ -23,7 +23,7 @@ class Scraper:
 
     def __init__(self):
         self.options = webdriver.ChromeOptions()
-        self.options.add_argument("--headless")  # run without a browser window, nice to disable while debugging though
+        # self.options.add_argument("--headless")  # run without a browser window, nice to disable while debugging though
         self.driver = webdriver.Chrome(options=self.options)
 
     def get_company_details(self, company_id):
@@ -40,7 +40,7 @@ class Scraper:
         except:
             print(company_id, "failed to fetch")
 
-        # almost always blocked by authwall, we need an account and cookies 
+        # almost always blocked by authwall, we need an account and cookies
 
     def get_companies_from_job_search(self, keyword, amount):
         companies = set()  # holds company ids - works like usernames
@@ -77,12 +77,32 @@ class Scraper:
 
         return list(companies)
 
-    def start(self):
-        companies = self.get_companies_from_job_search("developer", 10)
+    def load_cookies(self):
+        self.driver.get("https://www.linkedin.com/")
+        cookies = pickle.load(open("cookies.pkl", "rb"))
+        for cookie in cookies:
+            self.driver.add_cookie(cookie)
         wait()
-        for company in companies:
-            self.get_company_details(company)
-            wait()
+        self.driver.get("https://www.linkedin.com/feed")
+        wait()
+
+    def create_cookies(self):
+        self.driver.get("https://www.linkedin.com/")
+        # let user login on linkedin and get cookies
+        time.sleep(60)
+        print("saving cookies:",self.driver.get_cookies())
+        # dump the cookie to use in scraping
+        pickle.dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
+
+    def start(self):
+        self.load_cookies()
+        #self.create_cookies()
+
+        # companies = self.get_companies_from_job_search("developer", 10)
+        # wait()
+        # for company in companies:
+        #     self.get_company_details(company)
+        #     wait()
 
 
 if __name__ == '__main__':
