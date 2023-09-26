@@ -1,5 +1,4 @@
 import random
-import pickle
 import re
 from bs4 import BeautifulSoup
 import time
@@ -20,7 +19,12 @@ JOB_URL = "https://www.linkedin.com/jobs/search"
 COMPANY_URL = "https://www.linkedin.com/company/"
 PROFILE_URL = "https://www.linkedin.com/in/"
 
+# TOGGLING THIS COSTS MONEY. ONLY USE IN PROD WHEN DATA IS ACTUALLY SAVED
+# Also requires .env file in directory with API_KEY set
 USE_PROXY = False
+
+# Disable graphical interface,
+HEADLESS = False
 
 
 # randomized waiting to act more human
@@ -39,10 +43,12 @@ class Scraper:
 
     def __init__(self):
         self.options = webdriver.ChromeOptions()
-        # self.options.add_argument("--headless")  # run without a browser window, nice to disable while debugging though
+        if HEADLESS:
+            self.options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=self.options)
 
     def get_profile_work_experience(self, profile_id):
+        companies = set()
         self.driver.get(proxy(PROFILE_URL + profile_id))
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
 
@@ -51,9 +57,12 @@ class Scraper:
             for work_experience_item in work_experience_items:
                 job_link = work_experience_item.find("a", href=True)["href"]
                 company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
+                companies.add(company_id)
                 print(profile_id, company_id)
-        except:
+        except NoSuchElementException:
             print("Error: failed to fetch profile", profile_id)
+
+        return list(companies)
 
     def get_company_details(self, company_id):
         self.driver.get(proxy(COMPANY_URL + company_id))
@@ -65,8 +74,9 @@ class Scraper:
             size = numbers[0]
 
             industry_string = soup.find("div", {"data-test-id": "about-us__industry"}).find("dd").text.strip()
+            # Should also include description
             print(company_id, industry_string, size)
-        except:
+        except NoSuchElementException:
             print("Error: failed to fetch company", company_id)
 
         # almost always blocked by authwall, we need an account and cookies
