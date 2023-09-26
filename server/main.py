@@ -3,9 +3,14 @@ import pickle
 import re
 from bs4 import BeautifulSoup
 import time
+
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
+import os
+
+load_dotenv()
 
 MIN_WAIT = 1
 MAX_WAIT = 5
@@ -13,10 +18,21 @@ MAX_WAIT = 5
 GEO_ID = 105117694  # GEO id for Sweden
 JOB_URL = "https://www.linkedin.com/jobs/search"
 COMPANY_URL = "https://www.linkedin.com/company/"
+PROFILE_URL = "https://www.linkedin.com/in/"
+
+USE_PROXY = False
 
 
+# randomized waiting to act more human
 def wait():
     time.sleep(MIN_WAIT + random.random() * MAX_WAIT)
+
+
+# reroutes url via proxy to avoid authwall etc
+def proxy(url):
+    if not USE_PROXY:
+        return url
+    return 'https://proxy.scrapeops.io/v1/' + "?api_key=" + str(os.getenv("API_KEY") + "&url=" + url)
 
 
 class Scraper:
@@ -26,8 +42,21 @@ class Scraper:
         # self.options.add_argument("--headless")  # run without a browser window, nice to disable while debugging though
         self.driver = webdriver.Chrome(options=self.options)
 
+    def get_profile_work_experience(self, profile_id):
+        self.driver.get(proxy(PROFILE_URL + profile_id))
+        soup = BeautifulSoup(self.driver.page_source, "html.parser")
+
+        try:
+            work_experience_items = soup.findAll("li", {"class": "experience-item"})
+            for work_experience_item in work_experience_items:
+                job_link = work_experience_item.find("a", href=True)["href"]
+                company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
+                print(profile_id, company_id)
+        except:
+            print("Error: failed to fetch profile", profile_id)
+
     def get_company_details(self, company_id):
-        self.driver.get(COMPANY_URL + company_id)
+        self.driver.get(proxy(COMPANY_URL + company_id))
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         try:
             size_string = soup.find("div", {"data-test-id": "about-us__size"}).find("dd").text.strip()
@@ -38,7 +67,7 @@ class Scraper:
             industry_string = soup.find("div", {"data-test-id": "about-us__industry"}).find("dd").text.strip()
             print(company_id, industry_string, size)
         except:
-            print(company_id, "failed to fetch")
+            print("Error: failed to fetch company", company_id)
 
         # almost always blocked by authwall, we need an account and cookies
 
@@ -77,27 +106,8 @@ class Scraper:
 
         return list(companies)
 
-    def load_cookies(self):
-        self.driver.get("https://www.linkedin.com/")
-        cookies = pickle.load(open("cookies.pkl", "rb"))
-        for cookie in cookies:
-            self.driver.add_cookie(cookie)
-        wait()
-        self.driver.get("https://www.linkedin.com/feed")
-        wait()
-
-    def create_cookies(self):
-        self.driver.get("https://www.linkedin.com/")
-        # let user login on linkedin and get cookies
-        time.sleep(60)
-        print("saving cookies:",self.driver.get_cookies())
-        # dump the cookie to use in scraping
-        pickle.dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
-
     def start(self):
-        self.load_cookies()
-        #self.create_cookies()
-
+        self.get_profile_work_experience("victoria-dinic")
         # companies = self.get_companies_from_job_search("developer", 10)
         # wait()
         # for company in companies:
