@@ -1,7 +1,10 @@
+from datetime import datetime
 import random
 import re
 from bs4 import BeautifulSoup
 import time
+import sqlite3
+from urllib import parse
 
 from dotenv import load_dotenv
 from selenium import webdriver
@@ -15,6 +18,7 @@ MIN_WAIT = 1
 MAX_WAIT = 5
 
 GEO_ID = 105117694  # GEO id for Sweden
+HOME_URL = "https://www.linkedin.com/"
 JOB_URL = "https://www.linkedin.com/jobs/search"
 COMPANY_URL = "https://www.linkedin.com/company/"
 PROFILE_URL = "https://www.linkedin.com/in/"
@@ -23,8 +27,11 @@ PROFILE_URL = "https://www.linkedin.com/in/"
 # Also requires .env file in directory with API_KEY set
 USE_PROXY = False
 
-# Disable graphical interface,
+# Disable graphical interface
 HEADLESS = False
+
+# What database to use. dev | prod
+DATABASE = "dev"
 
 
 # randomized waiting to act more human
@@ -38,31 +45,110 @@ def proxy(url):
         return url
     return 'https://proxy.scrapeops.io/v1/' + "?api_key=" + str(os.getenv("API_KEY") + "&url=" + url)
 
+# ---- Soup Functions ----
+
+def extract_related_profiles(soup):
+    profiles = set()
+    related_profile_parent = soup.find("div", {"class": "aside-profiles-list"})
+    if not related_profile_parent:
+        return []
+    related_profile_items = related_profile_parent.findAll("li")
+    for related_profile_item in related_profile_items:
+        profile_link = parse.unquote(related_profile_item.find("a", href=True)["href"])
+        profile_id = profile_link[profile_link.index("in/") + len("in/"):profile_link.index("?")]
+        profiles.add(profile_id)
+    return list(profiles)
+
+
+def extract_work_experience(soup):
+    experiences = []
+    work_experience_items = soup.findAll("li", {"class": "experience-item"})
+    for work_experience_item in work_experience_items:
+        # company_id
+        job_link = parse.unquote(work_experience_item.find("a", href=True)["href"])
+        company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
+
+        # May have different positions w different timespans
+        # TODO: dont skip this lol
+        try:
+            test = work_experience_item.find("ul", {"class": "experience-group__positions"})
+            if test:
+                continue
+        except NoSuchElementException:
+            pass
+        # start and end time
+        duration = work_experience_item.find("p", {"class": "experience-item__duration"})
+        timestamps = duration.findAll("time")
+        if len(timestamps) == 1:
+            start_date = datetime.strptime(timestamps[0].text, "%b %Y")
+            end_date = None
+        else:
+            start_date = datetime.strptime(timestamps[0].text, "%b %Y")
+            end_date = datetime.strptime(timestamps[1].text, "%b %Y")
+
+        experiences.append({
+            "company_id": company_id,
+            "start_date": start_date,
+            "end_date": end_date
+        })
+
+    return experiences
+
+
+def did_load_profile(soup):
+    # Check if profile was fetched correctly, not authwall etc
+    try:
+        soup.find("li", {"class": "experience-item"})
+        soup.find("div", {"class": "aside-profiles-list"})
+    except NoSuchElementException:
+        return False
+    return True
+
 
 class Scraper:
 
     def __init__(self):
+
+        # Chromedriver Setup
         self.options = webdriver.ChromeOptions()
         if HEADLESS:
             self.options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=self.options)
 
-    def get_profile_work_experience(self, profile_id):
-        companies = set()
+        # Database Setup
+        self.con = sqlite3.connect(DATABASE + ".db")
+        self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE)")
+        self.con.execute("CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT)")
+        self.con.execute(
+            "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, start_date DATE, end_date DATE)")
+
+    def recursive_profile_search(self, start_profile_id):
+        pass
+
+    def get_profile(self, profile_id):
         self.driver.get(proxy(PROFILE_URL + profile_id))
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
-
-        try:
-            work_experience_items = soup.findAll("li", {"class": "experience-item"})
-            for work_experience_item in work_experience_items:
-                job_link = work_experience_item.find("a", href=True)["href"]
-                company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
-                companies.add(company_id)
-                print(profile_id, company_id)
-        except NoSuchElementException:
-            print("Error: failed to fetch profile", profile_id)
-
-        return list(companies)
+        time.sleep(10)
+        if not did_load_profile(soup):
+            return
+        work_experience = extract_work_experience(soup)
+        self.con.execute(f"INSERT INTO profile (profile_id) VALUES ('{profile_id}')")
+        for experience in work_experience:
+            company_id = experience["company_id"]
+            start_date = experience["start_date"].strftime("%Y-%m-%d")
+            if experience["end_date"]:
+                end_date = experience["end_date"].strftime("%Y-%m-%d")
+                self.con.execute(
+                    f"INSERT INTO experience (profile_id, company_id, start_date, end_date) VALUES ('{profile_id}', '{company_id}', {start_date}, {end_date}")
+            else:
+                self.con.execute(
+                    f"INSERT INTO experience (profile_id, company_id, start_date) VALUES ('{profile_id}', '{company_id}', {start_date}")
+        self.con.commit()
+        related_profiles = extract_related_profiles(soup)
+        return {
+            "work_experience": work_experience,
+            "related_profiles": related_profiles
+        }
 
     def get_company_details(self, company_id):
         self.driver.get(proxy(COMPANY_URL + company_id))
@@ -116,8 +202,19 @@ class Scraper:
 
         return list(companies)
 
+    def set_cookies(self):
+        self.driver.get(proxy(HOME_URL))
+        self.driver.add_cookie({"name": "lang",
+                                "value": "\"v=2&lang=en-us\"",
+                                "domain": ".linkedin.com"
+                                })
+        wait()
+
     def start(self):
-        self.get_profile_work_experience("victoria-dinic")
+        self.set_cookies()
+        print(self.get_profile("elias-lundgren"))
+        print(self.con.cursor().execute("SELECT * FROM experience").fetchall())
+
         # companies = self.get_companies_from_job_search("developer", 10)
         # wait()
         # for company in companies:
