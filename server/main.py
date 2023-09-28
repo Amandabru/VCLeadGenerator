@@ -4,15 +4,17 @@ import re
 from bs4 import BeautifulSoup
 import time
 import sqlite3
-from urllib import parse
+from urllib import parse, request
 
 from dotenv import load_dotenv
-from selenium import webdriver
+from seleniumwire import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 import os
 
 load_dotenv()
+
+API_KEY = str(os.getenv("API_KEY"))
 
 MIN_WAIT = 1
 MAX_WAIT = 5
@@ -28,7 +30,7 @@ PROFILE_URL = "https://www.linkedin.com/in/"
 USE_PROXY = False
 
 # Disable graphical interface
-HEADLESS = False
+HEADLESS = True
 
 # What database to use. dev | prod
 DATABASE = "dev"
@@ -38,12 +40,6 @@ DATABASE = "dev"
 def wait():
     time.sleep(MIN_WAIT + random.random() * MAX_WAIT)
 
-
-# reroutes url via proxy to avoid authwall etc
-def proxy(url):
-    if not USE_PROXY:
-        return url
-    return 'https://proxy.scrapeops.io/v1/' + "?api_key=" + str(os.getenv("API_KEY") + "&url=" + url)
 
 # ---- Soup Functions ----
 
@@ -65,7 +61,10 @@ def extract_work_experience(soup):
     work_experience_items = soup.findAll("li", {"class": "experience-item"})
     for work_experience_item in work_experience_items:
         # company_id
-        job_link = parse.unquote(work_experience_item.find("a", href=True)["href"])
+        link = work_experience_item.find("a", href=True)
+        if not link:
+            continue
+        job_link = parse.unquote(link["href"])
         company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
 
         # May have different positions w different timespans
@@ -108,12 +107,23 @@ def did_load_profile(soup):
 class Scraper:
 
     def __init__(self):
+        headless = str(HEADLESS).lower()
+        # Rotating Proxy Setup
+        proxy_options = {
+            'proxy': {
+                'http': f'http://scrapeops.headless_browser_mode={headless}:{API_KEY}@proxy.scrapeops.io:5353',
+                'https': f'http://scrapeops.headless_browser_mode={headless}:{API_KEY}@proxy.scrapeops.io:5353',
+                'no_proxy': 'localhost:127.0.0.1'
+            }
+        } if USE_PROXY else None
 
         # Chromedriver Setup
         self.options = webdriver.ChromeOptions()
         if HEADLESS:
             self.options.add_argument("--headless")
-        self.driver = webdriver.Chrome(options=self.options)
+        self.driver = webdriver.Chrome(options=self.options,
+                                       seleniumwire_options=proxy_options)
+        self.driver.set_page_load_timeout(60 * 2)
 
         # Database Setup
         self.con = sqlite3.connect(DATABASE + ".db")
@@ -121,28 +131,28 @@ class Scraper:
         self.con.execute("CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT)")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, start_date DATE, end_date DATE)")
+        self.con.commit()
 
     def recursive_profile_search(self, start_profile_id):
         pass
 
     def get_profile(self, profile_id):
-        self.driver.get(proxy(PROFILE_URL + profile_id))
+        self.driver.get(PROFILE_URL + profile_id)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
-        time.sleep(10)
         if not did_load_profile(soup):
             return
         work_experience = extract_work_experience(soup)
-        self.con.execute(f"INSERT INTO profile (profile_id) VALUES ('{profile_id}')")
+        self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id) VALUES ('{profile_id}')")
         for experience in work_experience:
             company_id = experience["company_id"]
             start_date = experience["start_date"].strftime("%Y-%m-%d")
             if experience["end_date"]:
                 end_date = experience["end_date"].strftime("%Y-%m-%d")
                 self.con.execute(
-                    f"INSERT INTO experience (profile_id, company_id, start_date, end_date) VALUES ('{profile_id}', '{company_id}', {start_date}, {end_date}")
+                    f"INSERT INTO experience (profile_id, company_id, start_date, end_date) VALUES ('{profile_id}', '{company_id}', '{start_date}', '{end_date}')")
             else:
                 self.con.execute(
-                    f"INSERT INTO experience (profile_id, company_id, start_date) VALUES ('{profile_id}', '{company_id}', {start_date}")
+                    f"INSERT INTO experience (profile_id, company_id, start_date) VALUES ('{profile_id}', '{company_id}', '{start_date}')")
         self.con.commit()
         related_profiles = extract_related_profiles(soup)
         return {
@@ -151,7 +161,7 @@ class Scraper:
         }
 
     def get_company_details(self, company_id):
-        self.driver.get(proxy(COMPANY_URL + company_id))
+        self.driver.get(COMPANY_URL + company_id)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         try:
             size_string = soup.find("div", {"data-test-id": "about-us__size"}).find("dd").text.strip()
@@ -203,23 +213,17 @@ class Scraper:
         return list(companies)
 
     def set_cookies(self):
-        self.driver.get(proxy(HOME_URL))
-        self.driver.add_cookie({"name": "lang",
-                                "value": "\"v=2&lang=en-us\"",
-                                "domain": ".linkedin.com"
-                                })
-        wait()
+        cookie = {"name": "lang",
+                  "value": "\"v=2&lang=en-us\"",
+                  "domain": ".linkedin.com"
+                  }
+        self.driver.execute_cdp_cmd('Network.enable', {})
+        self.driver.execute_cdp_cmd('Network.setCookie', cookie)
+        self.driver.execute_cdp_cmd('Network.disable', {})
 
     def start(self):
         self.set_cookies()
-        print(self.get_profile("elias-lundgren"))
-        print(self.con.cursor().execute("SELECT * FROM experience").fetchall())
-
-        # companies = self.get_companies_from_job_search("developer", 10)
-        # wait()
-        # for company in companies:
-        #     self.get_company_details(company)
-        #     wait()
+        self.get_profile("elias-lundgren")
 
 
 if __name__ == '__main__':
