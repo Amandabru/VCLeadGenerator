@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 import time
 import sqlite3
-from urllib import parse, request
+from urllib import parse
 
 from dotenv import load_dotenv
 from seleniumwire import webdriver
@@ -42,6 +42,9 @@ def wait():
 
 
 # ---- Soup Functions ----
+
+# TODO: improve these, sometimes they return empty, Month sometimes missing, etc
+# We should do proper error handling if stuff is not found
 
 def extract_related_profiles(soup):
     profiles = set()
@@ -107,12 +110,13 @@ def did_load_profile(soup):
 class Scraper:
 
     def __init__(self):
+        print("Setting up... ")
         headless = str(HEADLESS).lower()
         # Rotating Proxy Setup
         proxy_options = {
             'proxy': {
-                'http': f'http://scrapeops.headless_browser_mode={headless}:{API_KEY}@proxy.scrapeops.io:5353',
-                'https': f'http://scrapeops.headless_browser_mode={headless}:{API_KEY}@proxy.scrapeops.io:5353',
+                'http': f'http://scrapeops.headless_browser_mode={headless}.country=us:{API_KEY}@proxy.scrapeops.io:5353',
+                'https': f'http://scrapeops.headless_browser_mode={headless}.country=us:{API_KEY}@proxy.scrapeops.io:5353',
                 'no_proxy': 'localhost:127.0.0.1'
             }
         } if USE_PROXY else None
@@ -121,28 +125,71 @@ class Scraper:
         self.options = webdriver.ChromeOptions()
         if HEADLESS:
             self.options.add_argument("--headless")
+        self.options.add_argument('--no-sandbox')
+        self.options.add_argument('--disable-dev-sh-usage')
+        self.options.add_argument('--blink-settings=imagesEnabled=false')
         self.driver = webdriver.Chrome(options=self.options,
                                        seleniumwire_options=proxy_options)
         self.driver.set_page_load_timeout(60 * 2)
 
         # Database Setup
         self.con = sqlite3.connect(DATABASE + ".db")
-        self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE)")
+        self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE, saved BOOLEAN)")
         self.con.execute("CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT)")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, start_date DATE, end_date DATE)")
         self.con.commit()
 
-    def recursive_profile_search(self, start_profile_id):
-        pass
+        self.cursor = self.con.cursor()
+        self.saved_profiles = set()
+        self.potential_profiles = set()
+        for row in self.cursor.execute("SELECT profile_id, saved FROM profile").fetchall():
+            profile_id, saved = row[0], row[1]
+            if saved:
+                self.saved_profiles.add(profile_id)
+            else:
+                self.potential_profiles.add(profile_id)
+
+        print("saved:", list(self.saved_profiles))
+        print("potential:", list(self.potential_profiles))
+
+    def profile_search(self, amount=10, start_profile_id=None):
+
+        # get initial fetch
+        if start_profile_id and start_profile_id not in self.saved_profiles:
+            self.potential_profiles.add(start_profile_id)
+            self.get_profile(start_profile_id)
+
+        while amount > 0 and len(self.potential_profiles) > 0:
+            profile_id = list(self.potential_profiles).pop()  # grab an id from list
+            print("fetching profile:", profile_id)
+            success = self.get_profile(profile_id)
+            if success:
+                amount -= 1
+            else:
+                print("FAILED")
+
+            print("waiting")
+            time.sleep(15)
+        if amount == 0:
+            print("search completed")
+        elif len(self.potential_profiles) > 0:
+            print("search ended early because of lack of users")
 
     def get_profile(self, profile_id):
+
+        self.potential_profiles.remove(profile_id)
         self.driver.get(PROFILE_URL + profile_id)
+
+        if "authwall" in self.driver.current_url:
+            print("Err: authwall")
+            return False
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         if not did_load_profile(soup):
-            return
+            print("Err: couldnt find html")
+            return False
         work_experience = extract_work_experience(soup)
-        self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id) VALUES ('{profile_id}')")
+        print("got experiences")
         for experience in work_experience:
             company_id = experience["company_id"]
             start_date = experience["start_date"].strftime("%Y-%m-%d")
@@ -153,12 +200,19 @@ class Scraper:
             else:
                 self.con.execute(
                     f"INSERT INTO experience (profile_id, company_id, start_date) VALUES ('{profile_id}', '{company_id}', '{start_date}')")
-        self.con.commit()
+        self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id, saved) VALUES ('{profile_id}', true)")
+        self.saved_profiles.add(profile_id)
         related_profiles = extract_related_profiles(soup)
-        return {
-            "work_experience": work_experience,
-            "related_profiles": related_profiles
-        }
+        print("got related")
+        for related_profile_id in related_profiles:
+            self.con.execute(
+                f"INSERT INTO profile (profile_id, saved) VALUES ('{related_profile_id}', false) ON CONFLICT DO NOTHING")
+            if related_profile_id not in self.saved_profiles:
+                self.potential_profiles.add(related_profile_id)
+        print("commited to db")
+        self.con.commit()
+        print("loaded profile:", profile_id, "  work experience:", work_experience, "  related:", related_profiles)
+        return True
 
     def get_company_details(self, company_id):
         self.driver.get(COMPANY_URL + company_id)
@@ -222,8 +276,8 @@ class Scraper:
         self.driver.execute_cdp_cmd('Network.disable', {})
 
     def start(self):
-        self.set_cookies()
-        self.get_profile("elias-lundgren")
+        # self.set_cookies()
+        self.profile_search(3)
 
 
 if __name__ == '__main__':
