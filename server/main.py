@@ -11,6 +11,7 @@ from seleniumwire import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 import os
+from database import Database
 
 load_dotenv()
 
@@ -27,7 +28,7 @@ PROFILE_URL = "https://www.linkedin.com/in/"
 
 # TOGGLING THIS COSTS MONEY. ONLY USE IN PROD WHEN DATA IS ACTUALLY SAVED
 # Also requires .env file in directory with API_KEY set
-USE_PROXY = False
+USE_PROXY = True
 
 # Disable graphical interface
 HEADLESS = True
@@ -59,7 +60,53 @@ def extract_related_profiles(soup):
     return list(profiles)
 
 
-def extract_work_experience(soup):
+def extract_work_experience(company_id, soup):
+    # start and end time
+
+    start_date = None
+    end_date = None
+    try:
+        timestamps = soup.findAll("time")
+        try:
+            if len(timestamps) == 1:
+                start_date = datetime.strptime(timestamps[0].text, "%b %Y").strftime("%Y-%m-%d")
+                end_date = None
+            else:
+                start_date = datetime.strptime(timestamps[0].text, "%b %Y").strftime("%Y-%m-%d")
+                end_date = datetime.strptime(timestamps[1].text, "%b %Y").strftime("%Y-%m-%d")
+        except ValueError:
+            print("Err: could not parse dates 1", timestamps)
+
+        if not start_date and not end_date:
+            try:
+                if len(timestamps) == 1:
+                    start_date = datetime.strptime(timestamps[0].text, "%Y").strftime("%Y-%m-%d")
+                    end_date = None
+                else:
+                    start_date = datetime.strptime(timestamps[0].text, "%Y").strftime("%Y-%m-%d")
+                    end_date = datetime.strptime(timestamps[1].text, "%Y").strftime("%Y-%m-%d")
+            except ValueError:
+                print("Err: could not parse dates 2", timestamps)
+    except:
+        print("could not get duration or timestamp")
+        pass
+
+    # Role
+    role = None
+    try:
+        role = soup.find("h3").text.strip()
+    except:
+        pass
+
+    return {
+        "company_id": company_id,
+        "role": role,
+        "start_date": start_date,
+        "end_date": end_date
+    }
+
+
+def extract_work_experiences(soup):
     experiences = []
     work_experience_items = soup.findAll("li", {"class": "experience-item"})
     for work_experience_item in work_experience_items:
@@ -70,34 +117,28 @@ def extract_work_experience(soup):
         job_link = parse.unquote(link["href"])
         company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
 
-        # May have different positions w different timespans
-        # TODO: dont skip this lol
+        multiple_positions = None
         try:
-            test = work_experience_item.find("ul", {"class": "experience-group__positions"})
-            if test:
-                continue
+            multiple_positions = work_experience_item.find("ul", {"class": "experience-group__positions"})
         except NoSuchElementException:
             pass
-        # start and end time
-        duration = work_experience_item.find("p", {"class": "experience-item__duration"})
-        timestamps = duration.findAll("time")
-        if len(timestamps) == 1:
-            start_date = datetime.strptime(timestamps[0].text, "%b %Y")
-            end_date = None
-        else:
-            start_date = datetime.strptime(timestamps[0].text, "%b %Y")
-            end_date = datetime.strptime(timestamps[1].text, "%b %Y")
 
-        experiences.append({
-            "company_id": company_id,
-            "start_date": start_date,
-            "end_date": end_date
-        })
+        if multiple_positions:
+            group_positions = work_experience_item.findAll("li", {"class": "experience-group-position"})
+            for group_position in group_positions:
+                experience = extract_work_experience(company_id, group_position)
+                experiences.append(experience)
+        else:
+            experience = extract_work_experience(company_id, work_experience_item)
+            experiences.append(experience)
 
     return experiences
 
 
-def did_load_profile(soup):
+def did_load_profile(url, soup):
+    if "authwall" in url:
+        print("Err: authwall")
+        return False
     # Check if profile was fetched correctly, not authwall etc
     try:
         soup.find("li", {"class": "experience-item"})
@@ -115,8 +156,8 @@ class Scraper:
         # Rotating Proxy Setup
         proxy_options = {
             'proxy': {
-                'http': f'http://scrapeops.headless_browser_mode={headless}.country=us:{API_KEY}@proxy.scrapeops.io:5353',
-                'https': f'http://scrapeops.headless_browser_mode={headless}.country=us:{API_KEY}@proxy.scrapeops.io:5353',
+                'http': f'http://scrapeops.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
+                'https': f'http://scrapeops.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
                 'no_proxy': 'localhost:127.0.0.1'
             }
         } if USE_PROXY else None
@@ -131,90 +172,72 @@ class Scraper:
         self.driver = webdriver.Chrome(options=self.options,
                                        seleniumwire_options=proxy_options)
         self.driver.set_page_load_timeout(60 * 2)
-
-        # Database Setup
-        self.con = sqlite3.connect(DATABASE + ".db")
-        self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE, saved BOOLEAN)")
-        self.con.execute("CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT)")
-        self.con.execute(
-            "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, start_date DATE, end_date DATE)")
-        self.con.commit()
-
-        self.cursor = self.con.cursor()
-        self.saved_profiles = set()
-        self.potential_profiles = set()
-        for row in self.cursor.execute("SELECT profile_id, saved FROM profile").fetchall():
-            profile_id, saved = row[0], row[1]
-            if saved:
-                self.saved_profiles.add(profile_id)
-            else:
-                self.potential_profiles.add(profile_id)
-
-        print("saved:", list(self.saved_profiles))
-        print("potential:", list(self.potential_profiles))
+        self.database = Database(DATABASE)
 
     def profile_search(self, amount=10, start_profile_id=None):
-
+        print("profile search")
         # get initial fetch
-        if start_profile_id and start_profile_id not in self.saved_profiles:
-            self.potential_profiles.add(start_profile_id)
+        if start_profile_id and start_profile_id not in self.database.potential_profiles:
+            self.database.potential_profiles.add(start_profile_id)
             self.get_profile(start_profile_id)
 
-        while amount > 0 and len(self.potential_profiles) > 0:
-            profile_id = list(self.potential_profiles).pop()  # grab an id from list
-            print("fetching profile:", profile_id)
-            success = self.get_profile(profile_id)
+        while amount > 0 and len(self.database.potential_profiles) > 0:
+            profile_id = list(self.database.potential_profiles).pop()  # grab an id from list
+            success = False
+            try:
+                success = self.get_profile(profile_id)
+            except Exception as e:
+                print("UPPER ERROR:", e)
+
             if success:
                 amount -= 1
-            else:
-                print("FAILED")
 
-            print("waiting")
             time.sleep(15)
+
         if amount == 0:
             print("search completed")
-        elif len(self.potential_profiles) > 0:
+        elif len(self.database.potential_profiles) > 0:
             print("search ended early because of lack of users")
 
     def get_profile(self, profile_id):
-
-        self.potential_profiles.remove(profile_id)
         self.driver.get(PROFILE_URL + profile_id)
-
-        if "authwall" in self.driver.current_url:
-            print("Err: authwall")
-            return False
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
-        if not did_load_profile(soup):
-            print("Err: couldnt find html")
+
+        if not did_load_profile(self.driver.current_url, soup):
             return False
-        work_experience = extract_work_experience(soup)
-        print("got experiences")
-        for experience in work_experience:
-            company_id = experience["company_id"]
-            start_date = experience["start_date"].strftime("%Y-%m-%d")
-            if experience["end_date"]:
-                end_date = experience["end_date"].strftime("%Y-%m-%d")
-                self.con.execute(
-                    f"INSERT INTO experience (profile_id, company_id, start_date, end_date) VALUES ('{profile_id}', '{company_id}', '{start_date}', '{end_date}')")
-            else:
-                self.con.execute(
-                    f"INSERT INTO experience (profile_id, company_id, start_date) VALUES ('{profile_id}', '{company_id}', '{start_date}')")
-        self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id, saved) VALUES ('{profile_id}', true)")
-        self.saved_profiles.add(profile_id)
-        related_profiles = extract_related_profiles(soup)
-        print("got related")
-        for related_profile_id in related_profiles:
-            self.con.execute(
-                f"INSERT INTO profile (profile_id, saved) VALUES ('{related_profile_id}', false) ON CONFLICT DO NOTHING")
-            if related_profile_id not in self.saved_profiles:
-                self.potential_profiles.add(related_profile_id)
-        print("commited to db")
-        self.con.commit()
+
+        try:
+            # Get profile work experience
+            work_experience = extract_work_experiences(soup)
+            for experience in work_experience:
+                company_id = experience["company_id"]
+                start_date = experience["start_date"]
+                end_date = experience["end_date"]
+                role = experience["role"]
+                self.database.add_experience(profile_id, company_id, role, start_date, end_date)
+
+                # If the company is not added to database, add it
+                self.database.add_company(company_id)
+
+            # Enter that data has been saved in profile db
+            self.database.add_profile(profile_id, True)
+
+            # Get related profiles and insert potential future profiles into database
+            related_profiles = extract_related_profiles(soup)
+            for related_profile_id in related_profiles:
+                self.database.add_profile(related_profile_id, False)
+        except Exception as e:
+            print("ERROR:", e)
+            return False
+
+        # Commit all database changes
+        self.database.commit()
+        self.database.potential_profiles.remove(profile_id)
+
         print("loaded profile:", profile_id, "  work experience:", work_experience, "  related:", related_profiles)
         return True
 
-    def get_company_details(self, company_id):
+    def get_company(self, company_id):
         self.driver.get(COMPANY_URL + company_id)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         try:
@@ -276,8 +299,8 @@ class Scraper:
         self.driver.execute_cdp_cmd('Network.disable', {})
 
     def start(self):
-        # self.set_cookies()
-        self.profile_search(3)
+        self.set_cookies()
+        self.profile_search(5)
 
 
 if __name__ == '__main__':
