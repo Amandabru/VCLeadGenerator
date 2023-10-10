@@ -44,8 +44,9 @@ def wait():
 
 # ---- Soup Functions ----
 
-# TODO: improve these, sometimes they return empty, Month sometimes missing, etc
-# We should do proper error handling if stuff is not found
+valid_locations = {
+    "stockholm", "solna", "kista", "gothenburg"
+}
 
 def extract_related_profiles(soup):
     profiles = set()
@@ -54,9 +55,22 @@ def extract_related_profiles(soup):
         return []
     related_profile_items = related_profile_parent.findAll("li")
     for related_profile_item in related_profile_items:
+        try:
+            profile_location = related_profile_item.find("div", {"class": "base-aside-card__metadata"})
+            location_text = profile_location.text.strip().lower()
+            valid = False
+            for location in valid_locations:
+                if location in location_text:
+                    valid = True
+                    break
+            if not valid:
+                continue
+        except NoSuchElementException:
+            continue
         profile_link = parse.unquote(related_profile_item.find("a", href=True)["href"])
         profile_id = profile_link[profile_link.index("in/") + len("in/"):profile_link.index("?")]
         profiles.add(profile_id)
+
     return list(profiles)
 
 
@@ -182,7 +196,9 @@ class Scraper:
             self.get_profile(start_profile_id)
 
         while amount > 0 and len(self.database.potential_profiles) > 0:
-            profile_id = list(self.database.potential_profiles).pop()  # grab an id from list
+            profile_list = list(self.database.potential_profiles)  # grab an id from list
+            profile_id = profile_list.pop(random.randint(0, len(profile_list) - 1))
+
             success = False
             try:
                 success = self.get_profile(profile_id)
@@ -232,7 +248,6 @@ class Scraper:
 
         # Commit all database changes
         self.database.commit()
-        self.database.potential_profiles.remove(profile_id)
 
         print("loaded profile:", profile_id, "  work experience:", work_experience, "  related:", related_profiles)
         return True
@@ -300,11 +315,9 @@ class Scraper:
 
     def start(self):
         self.set_cookies()
-        self.profile_search(5)
+        self.profile_search(10)
 
 
 if __name__ == '__main__':
     scraper = Scraper()
     scraper.start()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

@@ -6,10 +6,15 @@ class Database:
     def __init__(self, db):
 
         self.con = sqlite3.connect(db + ".db")
+
+        # BE CAREFUL W THESE
+        # self.con.execute("DROP TABLE profile")
+        # self.con.execute("DROP TABLE company")
+        # self.con.execute("DROP TABLE experience")
+
         self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE, saved BOOLEAN)")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT, saved BOOLEAN)")
-        self.con.execute("DROP TABLE experience")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, role TEXT, start_date DATE, end_date DATE)")
         self.con.commit()
@@ -46,9 +51,11 @@ class Database:
         self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id, saved) VALUES ('{profile_id}', {saved})")
         if saved:
             self.saved_profiles.add(profile_id)
-            self.potential_profiles.remove(profile_id)
+            if profile_id in self.potential_profiles:
+                self.potential_profiles.remove(profile_id)
         else:
-            self.potential_profiles.add(profile_id)
+            if profile_id not in self.saved_profiles:
+                self.potential_profiles.add(profile_id)
 
     def add_experience(self, profile_id, company_id, role, start_date, end_date):
         self.con.execute(
