@@ -1,5 +1,6 @@
 import sqlite3
 
+
 # We move all the ugly database calls here to be able to see what's going on in the scraper
 class Database:
 
@@ -14,7 +15,7 @@ class Database:
 
         self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE, saved BOOLEAN)")
         self.con.execute(
-            "CREATE TABLE IF NOT EXISTS company(company_id TEXT, description TEXT, website_url TEXT, saved BOOLEAN)")
+            "CREATE TABLE IF NOT EXISTS company(company_id TEXT,name TEXT, description TEXT, website_url TEXT, saved BOOLEAN)")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, role TEXT, start_date DATE, end_date DATE)")
         self.con.commit()
@@ -38,7 +39,6 @@ class Database:
                 self.saved_companies.add(company_id)
             else:
                 self.potential_companies.add(company_id)
-
 
     def add_company(self, company_id, ):
         # Todo expand to allow company data to be inserted

@@ -48,6 +48,7 @@ valid_locations = {
     "stockholm", "solna", "kista", "gothenburg"
 }
 
+
 def extract_related_profiles(soup):
     profiles = set()
     related_profile_parent = soup.find("div", {"class": "aside-profiles-list"})
@@ -149,6 +150,43 @@ def extract_work_experiences(soup):
     return experiences
 
 
+def extract_company_info(soup):
+    size_string = soup.find("div", {"data-test-id": "about-us__size"}).find("dd").text.strip()
+    size_string = size_string.replace(",", "").replace(" ", "")
+    numbers = re.findall(r'\d+', size_string)
+    size = numbers.pop()
+
+    try:
+        better_size = soup.find("a", {"class": "face-pile__cta"}).text.strip()
+        better_size = "".join(i for i in better_size if i.isdigit())
+        size = better_size
+    except:
+        pass
+
+    name_string = soup.find("h1").text.strip()
+    industry_string = soup.find("div", {"data-test-id": "about-us__industry"}).find("dd").text.strip()
+
+    website = soup.find("div", {"data-test-id": "about-us__website"}).find("dd").find("a", href=True)
+    website_url = None
+    if website:
+        website_url = parse.unquote(website["href"])
+        if "?url=" in website_url:
+            website_url = website_url[website_url.find("?url=") + len("?url="):]
+        if "/?" in website_url:
+            website_url = website_url[:website_url.find("/?")]
+
+    about_string = soup.find("p", {"data-test-id": "about-us__description"}).text.strip()
+
+    company = {
+        "name": name_string,
+        "industry": industry_string,
+        "size": size,
+        "description": about_string,
+        "website": website_url
+    }
+    return company
+
+
 def did_load_profile(url, soup):
     if "authwall" in url:
         print("Err: authwall")
@@ -162,6 +200,13 @@ def did_load_profile(url, soup):
     return True
 
 
+def did_load_company(url, soup):
+    if "authwall" in url:
+        print("Err: authwall")
+        return False
+    return True
+
+
 class Scraper:
 
     def __init__(self):
@@ -170,8 +215,8 @@ class Scraper:
         # Rotating Proxy Setup
         proxy_options = {
             'proxy': {
-                'http': f'http://scrapeops.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
-                'https': f'http://scrapeops.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
+                'http': f'http://scrapeops.country=us.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
+                'https': f'http://scrapeops.country=us.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
                 'no_proxy': 'localhost:127.0.0.1'
             }
         } if USE_PROXY else None
@@ -215,6 +260,29 @@ class Scraper:
         elif len(self.database.potential_profiles) > 0:
             print("search ended early because of lack of users")
 
+    def company_search(self, amount=10):
+        print("company search")
+
+        while amount > 0 and len(self.database.potential_companies) > 0:
+            company_list = list(self.database.potential_companies)  # grab an id from list
+            company_id = company_list.pop(random.randint(0, len(company_list) - 1))
+
+            success = False
+            try:
+                success = self.get_company(company_id)
+            except Exception as e:
+                print("UPPER ERROR:", e)
+
+            if success:
+                amount -= 1
+
+            time.sleep(15)
+
+        if amount == 0:
+            print("search completed")
+        elif len(self.database.potential_profiles) > 0:
+            print("search ended early because of lack of companies")
+
     def get_profile(self, profile_id):
         self.driver.get(PROFILE_URL + profile_id)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
@@ -255,19 +323,13 @@ class Scraper:
     def get_company(self, company_id):
         self.driver.get(COMPANY_URL + company_id)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
-        try:
-            size_string = soup.find("div", {"data-test-id": "about-us__size"}).find("dd").text.strip()
-            size_string = size_string.replace(",", "").replace(" ", "")
-            numbers = re.findall(r'\d+', size_string)
-            size = numbers[0]
 
-            industry_string = soup.find("div", {"data-test-id": "about-us__industry"}).find("dd").text.strip()
-            # Should also include description
-            print(company_id, industry_string, size)
-        except NoSuchElementException:
-            print("Error: failed to fetch company", company_id)
+        if not did_load_profile(self.driver.current_url, soup):
+            return False
 
-        # almost always blocked by authwall, we need an account and cookies
+        company = extract_company_info(soup)
+
+
 
     def get_companies_from_job_search(self, keyword, amount):
         companies = set()  # holds company ids - works like usernames
@@ -315,7 +377,7 @@ class Scraper:
 
     def start(self):
         self.set_cookies()
-        self.profile_search(10)
+        self.get_company("bemlo")
 
 
 if __name__ == '__main__':
