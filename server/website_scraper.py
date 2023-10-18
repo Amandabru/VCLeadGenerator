@@ -121,11 +121,12 @@ class WebsiteScraper:
         return gpt_summarize_page(soup)
 
     def info_search(self, url):
+        # Todo inject employee / founder information into summarize all function
         self.driver.get(url)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         urls = self.get_navigation_urls(url, soup)
         info_urls = gpt_get_urls(urls)
-        all_info = []
+        all_info = [gpt_summarize_page(soup)]
         for url in info_urls:
             print(url)
             time.sleep(3)
@@ -136,4 +137,5 @@ class WebsiteScraper:
 
 if __name__ == '__main__':
     scraper = WebsiteScraper()
+    scraper.info_search("https://www.bemlo.se/")
 

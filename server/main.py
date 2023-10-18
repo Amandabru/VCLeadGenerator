@@ -113,8 +113,14 @@ def extract_work_experience(company_id, soup):
     except:
         pass
 
+    # todo add employees
+    employees = []
+
+    # todo add work experience description if availible
+
     return {
         "company_id": company_id,
+        "employees": employees,
         "role": role,
         "start_date": start_date,
         "end_date": end_date
@@ -328,6 +334,9 @@ class Scraper:
             return False
 
         company = extract_company_info(soup)
+        # Todo save company info to database
+        print(company)
+        return company
 
 
 
@@ -374,6 +383,16 @@ class Scraper:
         self.driver.execute_cdp_cmd('Network.enable', {})
         self.driver.execute_cdp_cmd('Network.setCookie', cookie)
         self.driver.execute_cdp_cmd('Network.disable', {})
+
+    def summarize_loop(self):
+        # todo get company id
+        company = self.get_company("bemlo")
+        # prioritera här, kan se storlek etc
+        for employee in company.employees:
+            self.get_profile(employee)
+
+        # todo run sql query and get all employees / roles at that company
+        # todo summarize employees / experience in a good way
 
     def start(self):
         self.set_cookies()
