@@ -1,6 +1,8 @@
 from datetime import datetime
 import random
 import re
+from urllib.parse import urlparse
+
 from bs4 import BeautifulSoup
 import time
 import sqlite3
@@ -12,6 +14,7 @@ from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 import os
 from database import Database
+from website_scraper import WebsiteScraper
 
 load_dotenv()
 
@@ -47,6 +50,11 @@ def wait():
 valid_locations = {
     "stockholm", "solna", "kista", "gothenburg"
 }
+
+
+# TODO add and insert names into profile database
+# TODO get education
+# TODO add retries if miss experience completely, at least once
 
 
 def extract_related_profiles(soup):
@@ -111,16 +119,11 @@ def extract_work_experience(company_id, soup):
     try:
         role = soup.find("h3").text.strip()
     except:
+        print("could not get role")
         pass
-
-    # todo add employees
-    employees = []
-
-    # todo add work experience description if availible
 
     return {
         "company_id": company_id,
-        "employees": employees,
         "role": role,
         "start_date": start_date,
         "end_date": end_date
@@ -137,11 +140,12 @@ def extract_work_experiences(soup):
             continue
         job_link = parse.unquote(link["href"])
         company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
-
+        print("work exp", company_id)
         multiple_positions = None
         try:
             multiple_positions = work_experience_item.find("ul", {"class": "experience-group__positions"})
         except NoSuchElementException:
+            print("no multiple positions")
             pass
 
         if multiple_positions:
@@ -154,6 +158,34 @@ def extract_work_experiences(soup):
             experiences.append(experience)
 
     return experiences
+
+
+def extract_profile_name(soup):
+    top_card = soup.find("section", {"class": "top-card-layout"})
+    name = top_card.find("h1").text.strip()
+    return name
+
+
+def extract_education(soup):
+    educations = []
+    education_items = soup.findAll("li", {"class": "education__list-item"})
+    for education_item in education_items:
+        school_text = education_item.find("h3", {"class": "profile-section-card__title"}).text.strip()
+
+        degree = education_item.find("h4", {"class": "profile-section-card__subtitle"})
+        degree_spans = degree.findAll("span")
+        degree_text = ""
+
+        for span in degree_spans:
+            text = span.text.strip()
+            if text == "-":
+                continue
+            text = re.sub(r'[0-9]', "", text.replace(".", ""))
+            degree_text += " " + text
+
+        degree_text = degree_text.strip()
+        educations.append({"school": school_text, "degree": degree_text})
+    return educations
 
 
 def extract_company_info(soup):
@@ -176,19 +208,33 @@ def extract_company_info(soup):
     website_url = None
     if website:
         website_url = parse.unquote(website["href"])
-        if "?url=" in website_url:
-            website_url = website_url[website_url.find("?url=") + len("?url="):]
-        if "/?" in website_url:
-            website_url = website_url[:website_url.find("/?")]
+        parsed_url = urlparse(website_url)
+        website_url = parsed_url.netloc
 
     about_string = soup.find("p", {"data-test-id": "about-us__description"}).text.strip()
+
+    # todo add employees
+    # (extract person info)
+
+    profiles = set()
+
+    try:
+        employees_parent = soup.find("section", {"data-test-id": "employees-at"})
+        employee_items = employees_parent.findAll("li")
+        for employee_item in employee_items:
+            profile_link = parse.unquote(employee_item.find("a", href=True)["href"])
+            profile_id = profile_link[profile_link.index("in/") + len("in/"):profile_link.index("?")]
+            profiles.add(profile_id)
+    except:
+        pass
 
     company = {
         "name": name_string,
         "industry": industry_string,
         "size": size,
         "description": about_string,
-        "website": website_url
+        "website": website_url,
+        "employees": list(profiles),
     }
     return company
 
@@ -200,8 +246,18 @@ def did_load_profile(url, soup):
     # Check if profile was fetched correctly, not authwall etc
     try:
         soup.find("li", {"class": "experience-item"})
+        # soup.find("li", {"class": "education__list-item"})
         soup.find("div", {"class": "aside-profiles-list"})
     except NoSuchElementException:
+        return False
+    blurred = False
+    try:
+        blur = soup.find("div", {"class": "blur"})
+        if blur:
+            blurred = True
+    except NoSuchElementException:
+        pass
+    if blurred:
         return False
     return True
 
@@ -240,7 +296,6 @@ class Scraper:
         self.database = Database(DATABASE)
 
     def profile_search(self, amount=10, start_profile_id=None):
-        print("profile search")
         # get initial fetch
         if start_profile_id and start_profile_id not in self.database.potential_profiles:
             self.database.potential_profiles.add(start_profile_id)
@@ -249,6 +304,7 @@ class Scraper:
         while amount > 0 and len(self.database.potential_profiles) > 0:
             profile_list = list(self.database.potential_profiles)  # grab an id from list
             profile_id = profile_list.pop(random.randint(0, len(profile_list) - 1))
+            print("profile search", profile_id)
 
             success = False
             try:
@@ -268,62 +324,123 @@ class Scraper:
 
     def company_search(self, amount=10):
         print("company search")
-
+        summarizer = WebsiteScraper()
         while amount > 0 and len(self.database.potential_companies) > 0:
             company_list = list(self.database.potential_companies)  # grab an id from list
             company_id = company_list.pop(random.randint(0, len(company_list) - 1))
-
-            success = False
+            company_id = "bemlo"
+            company = False
             try:
-                success = self.get_company(company_id)
+                company = self.get_company(company_id)
             except Exception as e:
                 print("UPPER ERROR:", e)
 
-            if success:
+            if company:
                 amount -= 1
+
+                for employee in company["employees"]:
+                    self.get_profile(employee)
+
+                employees = self.get_employees(company_id)
+                summary = summarizer.summarize_company_and_employees(company, employees)
+                print("result:")
+                print(summary)
+                # get employees
 
             time.sleep(15)
 
         if amount == 0:
             print("search completed")
-        elif len(self.database.potential_profiles) > 0:
+        elif len(self.database.potential_companies) > 0:
             print("search ended early because of lack of companies")
 
-    def get_profile(self, profile_id):
-        self.driver.get(PROFILE_URL + profile_id)
-        soup = BeautifulSoup(self.driver.page_source, "html.parser")
+    def company_list_summarize(self, companies):
+        summarizer = WebsiteScraper()
+        for company_id in companies:
+            company = False
+            try:
+                company = self.get_company(company_id)
+            except Exception as e:
+                print("UPPER ERROR:", e)
 
-        if not did_load_profile(self.driver.current_url, soup):
-            return False
+            if company:
+                for employee in company["employees"]:
+                    self.get_profile(employee, 2)
 
-        try:
-            # Get profile work experience
-            work_experience = extract_work_experiences(soup)
-            for experience in work_experience:
-                company_id = experience["company_id"]
-                start_date = experience["start_date"]
-                end_date = experience["end_date"]
-                role = experience["role"]
-                self.database.add_experience(profile_id, company_id, role, start_date, end_date)
+                employees = self.get_employees(company_id)
+                summary = summarizer.summarize_company_and_employees(company, employees)
+                print("result:")
+                print(summary)
+                # get employees
 
-                # If the company is not added to database, add it
-                self.database.add_company(company_id)
+            wait()
 
-            # Enter that data has been saved in profile db
-            self.database.add_profile(profile_id, True)
+    def get_profile(self, profile_id, tries=1):
+        success = False
+        while tries > 0 and not success:
+            tries -= 1
+            time.sleep(10)
+            self.driver.get(PROFILE_URL + profile_id)
+            soup = BeautifulSoup(self.driver.page_source, "html.parser")
+            if not did_load_profile(self.driver.current_url, soup):
+                print("error loading", profile_id, )
+                print("retrying", tries)
+                continue
 
-            # Get related profiles and insert potential future profiles into database
-            related_profiles = extract_related_profiles(soup)
-            for related_profile_id in related_profiles:
-                self.database.add_profile(related_profile_id, False)
-        except Exception as e:
-            print("ERROR:", e)
+            try:
+                # Get profile work experience
+                print("getting work experience")
+                work_experience = extract_work_experiences(soup)
+                if len(work_experience) == 0:
+                    print("retrying to get work experience")
+                    continue
+                for experience in work_experience:
+                    company_id = experience["company_id"]
+                    start_date = experience["start_date"]
+                    end_date = experience["end_date"]
+                    role = experience["role"]
+                    self.database.add_experience(profile_id, company_id, role, start_date, end_date)
+
+                    # If the company is not added to database, add it
+                    self.database.add_company(company_id)
+
+                # Get profile education
+                print("getting education")
+                education_experience = extract_education(soup)
+                for education in education_experience:
+                    school = education["school"]
+                    degree = education["degree"]
+                    self.database.add_education(profile_id, school, degree)  # s error here??!??! something sqlite but idk
+
+                # Enter that data has been saved in profile db
+                print("getting name")
+                name = extract_profile_name(soup)
+                self.database.add_profile(profile_id, True, name)
+
+                # Get related profiles and insert potential future profiles into database
+                print("getting related")
+                related_profiles = extract_related_profiles(soup)
+                for related_profile_id in related_profiles:
+                    self.database.add_profile(related_profile_id, False)
+
+                print("loaded profile:", profile_id, "  work experience:", work_experience, " education:",
+                      education_experience,
+                      "  related:", related_profiles)
+                success = True
+
+            except Exception as e:
+                print("ERROR:", e)
+                self.database.rollback()
+                success = False
+                continue
+
+        if not success:
             return False
 
         # Commit all database changes
         self.database.commit()
 
-        print("loaded profile:", profile_id, "  work experience:", work_experience, "  related:", related_profiles)
+
         return True
 
     def get_company(self, company_id):
@@ -331,14 +448,14 @@ class Scraper:
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
 
         if not did_load_profile(self.driver.current_url, soup):
+            print("error loading")
             return False
 
         company = extract_company_info(soup)
-        # Todo save company info to database
-        print(company)
+        self.database.add_company(company_id, company)
+        self.database.commit()
+
         return company
-
-
 
     def get_companies_from_job_search(self, keyword, amount):
         companies = set()  # holds company ids - works like usernames
@@ -375,6 +492,9 @@ class Scraper:
 
         return list(companies)
 
+    def get_employees(self, company_id):
+        return self.database.get_employee_info(company_id)
+
     def set_cookies(self):
         cookie = {"name": "lang",
                   "value": "\"v=2&lang=en-us\"",
@@ -384,19 +504,13 @@ class Scraper:
         self.driver.execute_cdp_cmd('Network.setCookie', cookie)
         self.driver.execute_cdp_cmd('Network.disable', {})
 
-    def summarize_loop(self):
-        # todo get company id
-        company = self.get_company("bemlo")
-        # prioritera här, kan se storlek etc
-        for employee in company.employees:
-            self.get_profile(employee)
-
-        # todo run sql query and get all employees / roles at that company
-        # todo summarize employees / experience in a good way
-
     def start(self):
         self.set_cookies()
-        self.get_company("bemlo")
+        self.company_list_summarize(["occlutech"])
+        # self.profile_search(1, )
+        # self.company_search(1)
+        # print(self.get_company("bemlo"))
+        # self.get_employees("kth")
 
 
 if __name__ == '__main__':

@@ -24,12 +24,23 @@ HEADLESS = False
 BASE_PROMPT = "YOU ARE A VENTURE CAPITALIST RESEARCHING A SPECIFIC COMPANY, WHAT IS IMPORTANT FOR YOU IS THE BUSINESS IDEA AND WHO THE FOUNDERS ARE AND WHAT THEY HAVE DONE PREVIOUSLY. "
 SEARCH_HELP_PROMPT = "Which of these urls are most likely to contain important information about the business idea and leadership of the company? RESPOND BY ONLY A LIST OF URLS, SEPARATED BY NEWLINE, MINIMUM TWO, MAXIMUM 3:"
 SUMMARIZE_PAGE_PROMPT = "Condense all important information about what this company is doing and discard unneccessary website information. You will get raw text data extracted from a webpage. RESPOND AS SHORTLY AS POSSIBLE WITHOUT REMOVING ANYTHING IMPORTANT. RESPOND ONLY WITH A SUMMARY"
-SUMMARIZE_ALL_PROMPT = "Combine the inputs and create a concice summary with two headings, business and founders. Don't remove any important information. RESPOND ONLY WITH A SHORT AND RELEVANT SUMMARY"
+SUMMARIZE_ALL_PROMPT = "Combine inputs from the website, company linkedin and employee linkedin to create a concice summary with two headings, business and founders. Don't remove any important information, remove irrelevant information and keep it short. RESPOND ONLY WITH A SHORT AND RELEVANT SUMMARY"
 
 # TODO Take a look at gpt functions and start implementing where possible
 
-def gpt_summarize_all(information):
-    message, reason = gpt(BASE_PROMPT + SUMMARIZE_ALL_PROMPT, "\n\n".join(information))
+def gpt_summarize_all(webiste_information, linkedin_information, employee_information):
+    website = "WEBSITE INFORMATION:\n" + "\n\n".join(webiste_information)
+    linkedin = "LINKEDIN INFORMATION:\n" + str(linkedin_information)
+    # Hur ska employees vara uppbyggt?
+    # {Name, Role, Start} typ
+    employees = "EMPLOYEE INFORMATION:\n" + str(employee_information)
+
+    print("summarizer")
+    print("website",website)
+    print("linkedin", linkedin)
+    print("employees", employees)
+
+    message, reason = gpt(BASE_PROMPT + SUMMARIZE_ALL_PROMPT, website + linkedin + employees)
     return message["content"].strip()
 
 
@@ -121,7 +132,7 @@ class WebsiteScraper:
         return gpt_summarize_page(soup)
 
     def info_search(self, url):
-        # Todo inject employee / founder information into summarize all function
+        print(url)
         self.driver.get(url)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         urls = self.get_navigation_urls(url, soup)
@@ -131,8 +142,14 @@ class WebsiteScraper:
             print(url)
             time.sleep(3)
             all_info.append(self.summarize_page(url))
-        print("INFO", all_info)
-        print("FINAL", gpt_summarize_all(all_info))
+        return all_info
+
+    def summarize_company_and_employees(self, company_info, employee_info):
+        url = company_info["website"]
+        website_info = self.info_search(url)
+        summary = gpt_summarize_all(website_info, company_info, employee_info)
+        print(summary)
+        return summary
 
 
 if __name__ == '__main__':
