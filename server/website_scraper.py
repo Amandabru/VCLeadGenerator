@@ -19,7 +19,7 @@ assert OPENAI_API_MODEL, "OPENAI_API_MODEL environment variable is missing from 
 
 openai.api_key = OPENAI_API_KEY
 
-HEADLESS = False
+HEADLESS = True
 
 BASE_PROMPT = "YOU ARE A VENTURE CAPITALIST RESEARCHING A SPECIFIC COMPANY, WHAT IS IMPORTANT FOR YOU IS THE BUSINESS IDEA AND WHO THE FOUNDERS ARE AND WHAT THEY HAVE DONE PREVIOUSLY. "
 SEARCH_HELP_PROMPT = "Which of these urls are most likely to contain important information about the business idea and leadership of the company? RESPOND BY ONLY A LIST OF URLS, SEPARATED BY NEWLINE, MINIMUM TWO, MAXIMUM 3:"

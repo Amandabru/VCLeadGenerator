@@ -20,8 +20,8 @@ load_dotenv()
 
 API_KEY = str(os.getenv("API_KEY"))
 
-MIN_WAIT = 1
-MAX_WAIT = 5
+MIN_WAIT = 10
+MAX_WAIT = 30
 
 GEO_ID = 105117694  # GEO id for Sweden
 HOME_URL = "https://www.linkedin.com/"
@@ -50,12 +50,6 @@ def wait():
 valid_locations = {
     "stockholm", "solna", "kista", "gothenburg"
 }
-
-
-# TODO add and insert names into profile database
-# TODO get education
-# TODO add retries if miss experience completely, at least once
-
 
 def extract_related_profiles(soup):
     profiles = set()
@@ -161,8 +155,11 @@ def extract_work_experiences(soup):
 
 
 def extract_profile_name(soup):
-    top_card = soup.find("section", {"class": "top-card-layout"})
-    name = top_card.find("h1").text.strip()
+    try:
+        top_card = soup.find("section", {"class": "top-card-layout"})
+        name = top_card.find("h1").text.strip()
+    except:
+        return
     return name
 
 
@@ -207,9 +204,14 @@ def extract_company_info(soup):
     website = soup.find("div", {"data-test-id": "about-us__website"}).find("dd").find("a", href=True)
     website_url = None
     if website:
+
         website_url = parse.unquote(website["href"])
+        if "?url=" in website_url:
+            website_url = website_url[website_url.find("?url=") + len("?url="):]
+        if "&" in website_url:
+            website_url = website_url[:website_url.find("&")]
         parsed_url = urlparse(website_url)
-        website_url = parsed_url.netloc
+        website_url = "https://" + parsed_url.netloc
 
     about_string = soup.find("p", {"data-test-id": "about-us__description"}).text.strip()
 
@@ -290,6 +292,7 @@ class Scraper:
         self.options.add_argument('--no-sandbox')
         self.options.add_argument('--disable-dev-sh-usage')
         self.options.add_argument('--blink-settings=imagesEnabled=false')
+        self.options.add_argument('--ignore-certificate-errors')
         self.driver = webdriver.Chrome(options=self.options,
                                        seleniumwire_options=proxy_options)
         self.driver.set_page_load_timeout(60 * 2)
@@ -328,7 +331,6 @@ class Scraper:
         while amount > 0 and len(self.database.potential_companies) > 0:
             company_list = list(self.database.potential_companies)  # grab an id from list
             company_id = company_list.pop(random.randint(0, len(company_list) - 1))
-            company_id = "bemlo"
             company = False
             try:
                 company = self.get_company(company_id)
@@ -364,8 +366,10 @@ class Scraper:
                 print("UPPER ERROR:", e)
 
             if company:
+                wait()
                 for employee in company["employees"]:
                     self.get_profile(employee, 2)
+                    wait()
 
                 employees = self.get_employees(company_id)
                 summary = summarizer.summarize_company_and_employees(company, employees)
@@ -376,6 +380,7 @@ class Scraper:
             wait()
 
     def get_profile(self, profile_id, tries=1):
+        print("get_profile", profile_id)
         success = False
         while tries > 0 and not success:
             tries -= 1
@@ -389,10 +394,11 @@ class Scraper:
 
             try:
                 # Get profile work experience
-                print("getting work experience")
+                print("getting work experience and education")
                 work_experience = extract_work_experiences(soup)
-                if len(work_experience) == 0:
-                    print("retrying to get work experience")
+                education_experience = extract_education(soup)
+                if len(work_experience) == 0 and len(education_experience) == 0 and tries > 0:
+                    print("retrying to get experience")
                     continue
                 for experience in work_experience:
                     company_id = experience["company_id"]
@@ -405,7 +411,6 @@ class Scraper:
                     self.database.add_company(company_id)
 
                 # Get profile education
-                print("getting education")
                 education_experience = extract_education(soup)
                 for education in education_experience:
                     school = education["school"]
@@ -415,6 +420,8 @@ class Scraper:
                 # Enter that data has been saved in profile db
                 print("getting name")
                 name = extract_profile_name(soup)
+                if not name:
+                    name = profile_id.replace("-"," ")
                 self.database.add_profile(profile_id, True, name)
 
                 # Get related profiles and insert potential future profiles into database
@@ -422,7 +429,6 @@ class Scraper:
                 related_profiles = extract_related_profiles(soup)
                 for related_profile_id in related_profiles:
                     self.database.add_profile(related_profile_id, False)
-
                 print("loaded profile:", profile_id, "  work experience:", work_experience, " education:",
                       education_experience,
                       "  related:", related_profiles)
@@ -439,8 +445,6 @@ class Scraper:
 
         # Commit all database changes
         self.database.commit()
-
-
         return True
 
     def get_company(self, company_id):
@@ -506,12 +510,13 @@ class Scraper:
 
     def start(self):
         self.set_cookies()
-        self.company_list_summarize(["occlutech"])
+        self.company_list_summarize(["andrepeat"])
         # self.profile_search(1, )
         # self.company_search(1)
-        # print(self.get_company("bemlo"))
+        #print(self.get_company("winteria"))
         # self.get_employees("kth")
 
+# TODO split summary text and add that to database too
 
 if __name__ == '__main__':
     scraper = Scraper()
