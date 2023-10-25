@@ -11,7 +11,7 @@ function NavBar() {
                 <Link to="/explore" className="test">Explore</Link>
             </li>
             <li>
-                <Link to="/saved">Saved</Link>
+                <Link to="/saved">Liked</Link>
             </li>
             <li>
                 <Link to="/profile">Profile</Link>
