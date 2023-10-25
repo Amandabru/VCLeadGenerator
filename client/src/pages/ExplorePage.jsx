@@ -1,9 +1,10 @@
+import CardComponent from "../components/CardComponent";
+import './ExplorePage.css';
+
 function ExplorePage() {
     return (
-        <div>
-            <h1>
-                ExplorePage
-            </h1>
+        <div className="exploreContainer">
+            <CardComponent/>
         </div>
     );
 }
