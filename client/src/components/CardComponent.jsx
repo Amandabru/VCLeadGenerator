@@ -31,7 +31,7 @@ function CardComponent() {
             px: 'var(--Card-padding)',
           }}
         >
-        <Typography fontSize="xl4" fontWeight="xl" textColor="#fff">
+        <Typography fontFamily="'Poppins', sans-serif" fontSize="xl4" fontWeight="xl" textColor="#fff">
             Company Name
         </Typography>
         <AspectRatio sx={{ mt: 1 }} ratio="19/8" objectFit="contain" variant="plain">
@@ -40,21 +40,21 @@ function CardComponent() {
               src="https://static.vecteezy.com/system/resources/previews/006/409/485/original/people-thinking-to-make-decision-problem-solving-and-find-creative-ideas-with-question-mark-in-flat-cartoon-background-for-poster-illustration-vector.jpg"
             />
         </AspectRatio>
-        <div style={{display: 'flex', alignItems: 'center' }}>
-            <Typography textColor="primary.200" sx={{ mt: 4, marginRight: '1rem' }}>
+        <div style={{display: 'flex', alignItems: 'center', }}>
+            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginRight: '1rem' }}>
                 Tag
             </Typography>
-            <Typography textColor="primary.200" sx={{ mt: 4, marginLeft: '15rem', marginRight: '1rem' }}>
+            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginLeft: '15rem', marginRight: '1rem' }}>
                 Place
             </Typography>
-            <Typography textColor="primary.200" sx={{ mt: 4 }}>
+            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5}}>
                 Founded in year
             </Typography>
         </div>
-        <Typography textColor="primary.200" sx={{ mt: 4 }}>
+        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 4 }}>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
         </Typography>
-        <Typography textColor="primary.200" sx={{ mt: 4 }}>
+        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 4 }}>
             <a href="">
                 Link to Website
             </a>
@@ -62,13 +62,12 @@ function CardComponent() {
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
-            <Typography level="title-lg">Employees</Typography>
+            <Typography fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
-                EMPLOYEES
             <ul className="custom-list">
-                <li>Jans</li>
-                <li>Janne</li>
-                <li>Johan</li>
+                <li>Jans Jansson</li>
+                <li>Janne Janneson</li>
+                <li>Johan Jonsson</li>
             </ul>
             </Typography>
           </CardContent>

@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
 .left-side {
     background-color: #235347;
 }
 
 .right-side{
-    background-color: #131B23;
+    background-color: #131B23 !important;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.248);
+}
+
+.employees-title{
+    color: white !important;
 }
 
 .custom-list {
@@ -22,6 +28,7 @@
     text-align: left;
     margin-bottom: 1.5rem; /* Spacing between names and lines */
     position: relative;
+    font-family: 'Poppins', sans-serif;
 }
   
 .custom-list li::after {
