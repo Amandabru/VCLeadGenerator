@@ -2,12 +2,43 @@
 
 .left-side {
     background-color: #235347;
+    transition: background-color 1s;
 }
+.left-side2 {
+    background-color: #235347;
+  }
 
+.left-side2::before {
+    content: "";
+    position: absolute;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background-color: #131B23;
+    animation: slideBackground 1s forwards;
+}
+  
+@keyframes slideBackground {
+    0% {
+      left: 100%;
+      width: 0;
+    }
+    100% {
+      left: 0;
+      width: 100%;
+    }
+}
+  
 .right-side{
     background-color: #131B23 !important;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.248);
 }
+
+.move-left {
+    transform: translateX(-190%);
+    transition: transform 1s;
+  }
 
 .employees-title{
     color: white !important;
@@ -62,4 +93,5 @@ ul li a:hover{
     padding-left: 0.4rem;
     padding-right: 0.4rem;
 }
+
 
