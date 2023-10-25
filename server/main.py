@@ -373,7 +373,7 @@ class Scraper:
                         self.get_profile(employee, 2)
                         wait()
                     else:
-                        print("already got",employee)
+                        print("already got", employee)
 
                 employees = self.get_employees(company_id)
                 business, founders = summarizer.summarize_company_and_employees(company, employees)
@@ -522,17 +522,15 @@ class Scraper:
 
         companies = [
             #"lifesum-app",
-            "pliance",
-            "sosafe-official",
-            "simegroup",
+            #"pliance",
+            #"sosafe-official",
+            #"simegroup",
             #"sniph",
-            "callinganyone",
+            #"callinganyone",
             "karmalicious"
         ]
 
         self.company_list_summarize(companies)
-
-# TODO split summary text and add that to database too
 
 if __name__ == '__main__':
     scraper = Scraper()

@@ -9,3 +9,17 @@ https://googlechromelabs.github.io/chrome-for-testing/#stable
 3. install python stuff, pip3 install should work
 
 might work
+
+How to serve
+
+install uvicorn and fastapi
+
+````python -m pip install fastapi uvicorn[standard]````
+
+then serve with
+
+````uvicorn serve:app --reload````
+
+then get data from db with
+
+http://127.0.0.1:8000/fetch/[AMOUNT]
