@@ -7,3 +7,9 @@
 html, body {
   height: 100%
 }
+
+body {
+  background: linear-gradient(90deg, #C2E1CC, #FFFFFF);
+  height: 100vh;
+  width: 100vw;
+}
