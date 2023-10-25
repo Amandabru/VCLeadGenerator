@@ -3,32 +3,70 @@ ul {
 }
 
 nav {
-display: flex;
-justify-content: space-between;
-align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 4rem;
+    margin-left: 1rem;
 }
 
 nav .title{
-font-size: 1.5rem;
-margin: 1rem;
-font-weight: bold;
-text-decoration: none;
-color: black;
+    position: relative;
+    font-size: 1.5rem;
+    margin: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+nav .title:hover{
+    color:black;
 }
 
 nav ul {
-display: flex;
-}
-
-nav ul li {
-list-style: none;
+    display: flex;
 }
 
 nav ul li a{
-display: block;
-text-decoration: none;
-color: black;
-padding: 0.5rem;
-margin: 0 0.5rem;
-
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 0.5rem;
+    margin: 0 0.5rem;
 }
+
+
+nav ul li a:hover {
+    color:black;
+}
+
+nav ul li a::before, nav .title::before{
+    content: "";
+    position: absolute;
+    display: block;
+    width: 80%;
+    height: 1px;
+    bottom: 0.3rem;
+    background-color: #000;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+}
+
+nav .title::before{
+    content: "";
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 1px;
+    left: 0;
+    bottom: 0.3rem;
+    background-color: #000;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+}
+
+nav ul li a:hover::before, nav .title:hover::before{
+    transform: scaleX(1);
+}
+

@@ -8,7 +8,7 @@ function NavBar() {
           <Link to="/" className="title">Name</Link>
         <ul>
             <li>
-                <Link to="/explore">Explore</Link>
+                <Link to="/explore" className="test">Explore</Link>
             </li>
             <li>
                 <Link to="/saved">Saved</Link>
