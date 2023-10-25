@@ -26,7 +26,7 @@
     padding: 0;
     color: white;
     text-align: left;
-    margin-bottom: 1.5rem; /* Spacing between names and lines */
+    margin-bottom: 1.5rem;
     position: relative;
     font-family: 'Poppins', sans-serif;
 }
@@ -37,7 +37,20 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 1px; /* Adjust the line height as needed */
-    background: linear-gradient(90deg, #FFFFFF, transparent); /* Create a gradient from transparent to black (adjust the color as needed) */
+    height: 1px;
+    background: linear-gradient(90deg, #FFFFFF, transparent);
+    transition: width 0.3s ease, background-position 0.3s ease;
 }
-  
+
+.custom-list li:hover::after {
+    width: 0; /* Shrink the line's width to zero */
+    background-position: 100% 0; /* Move the gradient to the right edge */
+  }
+
+ul li a {
+    color: white;
+}
+
+ul li a:hover{
+    color:white;
+}

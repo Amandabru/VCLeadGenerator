@@ -24,7 +24,7 @@ function CardComponent() {
         <CardOverflow
           className="left-side"
           sx={{
-            flex: '0 0 500px',
+            flex: '0 0 30rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
@@ -32,7 +32,7 @@ function CardComponent() {
           }}
         >
         <Typography fontFamily="'Poppins', sans-serif" fontSize="xl4" fontWeight="xl" textColor="#fff">
-            Company Name
+            QuantumFleet
         </Typography>
         <AspectRatio sx={{ mt: 1 }} ratio="19/8" objectFit="contain" variant="plain">
             <img
@@ -41,18 +41,20 @@ function CardComponent() {
             />
         </AspectRatio>
         <div style={{display: 'flex', alignItems: 'center', }}>
-            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginRight: '1rem' }}>
-                Tag
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginRight: '1rem' }}>
+                TRANSPORTATION
             </Typography>
-            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginLeft: '15rem', marginRight: '1rem' }}>
-                Place
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginLeft: '10rem', marginRight: '1rem' }}>
+                Stockholm
             </Typography>
-            <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5}}>
-                Founded in year
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5}}>
+                Founded in 2022
             </Typography>
         </div>
-        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 4 }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
+        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 2}}>
+            QuantumFleet is revolutionizing the transportation industry by developing a fleet of quantum-powered vehicles. 
+            Our cutting-edge quantum technology allows for near-instantaneous travel between locations, 
+            drastically reducing commute times and carbon emissions.
         </Typography>
         <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 4 }}>
             <a href="">
@@ -62,12 +64,12 @@ function CardComponent() {
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
-            <Typography fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
+            <Typography sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
-                <li>Jans Jansson</li>
-                <li>Janne Janneson</li>
-                <li>Johan Jonsson</li>
+                <li> <a href="#1">Jans Jansson</a></li>
+                <li><a href="#1">Janne Janneson</a></li>
+                <li><a href="#1">Johan Jonsson</a></li>
             </ul>
             </Typography>
           </CardContent>
