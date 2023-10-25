@@ -64,17 +64,12 @@ function CardComponent() {
           <CardContent>
             <Typography level="title-lg">Employees</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
-              <ul>
-                <li>
-                    Jans
-                </li>
-                <li>
-                    Janne
-                </li>
-                <li>
-                    Johan
-                </li>
-              </ul>
+                EMPLOYEES
+            <ul className="custom-list">
+                <li>Jans</li>
+                <li>Janne</li>
+                <li>Johan</li>
+            </ul>
             </Typography>
           </CardContent>
 
