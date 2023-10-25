@@ -4,6 +4,8 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import './CardComponent.css';
+import { CgProfile } from 'react-icons/cg';
+import { MdOutlinePlace } from 'react-icons/md';
 
 
 function CardComponent() {
@@ -44,8 +46,8 @@ function CardComponent() {
             <Typography className="tag" fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginRight: '1rem' }}>
                 TRANSPORTATION
             </Typography>
-            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginLeft: '10rem', marginRight: '1rem' }}>
-                Stockholm
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginLeft: '8rem', marginRight: '1rem' }}>
+                <MdOutlinePlace size={15}/> Stockholm
             </Typography>
             <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5}}>
                 Founded in 2022
@@ -67,9 +69,10 @@ function CardComponent() {
             <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
-                <li> <a href="#1">Jans Jansson</a></li>
-                <li><a href="#1">Janne Janneson</a></li>
-                <li><a href="#1">Johan Jonsson</a></li>
+                <li> <CgProfile/><a href="#1"> Bo Tunnquist</a></li>
+                <li><CgProfile/><a href="#1"> Janne Jansson</a></li>
+                <li><CgProfile/><a href="#1"> Sofia Andersson</a></li>
+                <li><CgProfile/><a href="#1"> Kalle Karlsson</a></li>
             </ul>
             </Typography>
           </CardContent>
