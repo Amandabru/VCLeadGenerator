@@ -41,22 +41,22 @@ function CardComponent() {
             />
         </AspectRatio>
         <div style={{display: 'flex', alignItems: 'center', }}>
-            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginRight: '1rem' }}>
+            <Typography className="tag" fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginRight: '1rem' }}>
                 TRANSPORTATION
             </Typography>
-            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5, marginLeft: '10rem', marginRight: '1rem' }}>
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginLeft: '10rem', marginRight: '1rem' }}>
                 Stockholm
             </Typography>
-            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 5}}>
+            <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5}}>
                 Founded in 2022
             </Typography>
         </div>
-        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 2}}>
+        <Typography fontSize="0.9rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
             QuantumFleet is revolutionizing the transportation industry by developing a fleet of quantum-powered vehicles. 
             Our cutting-edge quantum technology allows for near-instantaneous travel between locations, 
             drastically reducing commute times and carbon emissions.
         </Typography>
-        <Typography fontFamily="'Poppins', sans-serif" textColor="primary.200" sx={{ mt: 4 }}>
+        <Typography fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 4 }}>
             <a href="">
                 Link to Website
             </a>
@@ -64,7 +64,7 @@ function CardComponent() {
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
-            <Typography sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
+            <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
                 <li> <a href="#1">Jans Jansson</a></li>

@@ -43,8 +43,8 @@
 }
 
 .custom-list li:hover::after {
-    width: 0; /* Shrink the line's width to zero */
-    background-position: 100% 0; /* Move the gradient to the right edge */
+    width: 0;
+    background-position: 100% 0;
   }
 
 ul li a {
@@ -54,3 +54,12 @@ ul li a {
 ul li a:hover{
     color:white;
 }
+
+.tag{
+    border-radius: 0.5rem;
+    padding: 0.2rem;
+    background-color: #236C61;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
