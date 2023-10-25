@@ -20,8 +20,8 @@ load_dotenv()
 
 API_KEY = str(os.getenv("API_KEY"))
 
-MIN_WAIT = 10
-MAX_WAIT = 30
+MIN_WAIT = 5
+MAX_WAIT = 15
 
 GEO_ID = 105117694  # GEO id for Sweden
 HOME_URL = "https://www.linkedin.com/"
@@ -71,7 +71,7 @@ def extract_related_profiles(soup):
         except NoSuchElementException:
             continue
         profile_link = parse.unquote(related_profile_item.find("a", href=True)["href"])
-        profile_id = profile_link[profile_link.index("in/") + len("in/"):profile_link.index("?")]
+        profile_id = profile_link[profile_link.find("in/") + len("in/"):profile_link.find("?")]
         profiles.add(profile_id)
 
     return list(profiles)
@@ -134,7 +134,6 @@ def extract_work_experiences(soup):
             continue
         job_link = parse.unquote(link["href"])
         company_id = job_link[job_link.index("company/") + len("company/"):job_link.index("?")]
-        print("work exp", company_id)
         multiple_positions = None
         try:
             multiple_positions = work_experience_item.find("ul", {"class": "experience-group__positions"})
@@ -215,9 +214,6 @@ def extract_company_info(soup):
 
     about_string = soup.find("p", {"data-test-id": "about-us__description"}).text.strip()
 
-    # todo add employees
-    # (extract person info)
-
     profiles = set()
 
     try:
@@ -279,7 +275,7 @@ class Scraper:
         # Rotating Proxy Setup
         proxy_options = {
             'proxy': {
-                'http': f'http://scrapeops.country=us.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
+                'http': f'http://scrapeops.country=us.headless_browser_mode={headless}.optimize_request=true.:{API_KEY}@proxy.scrapeops.io:5353',
                 'https': f'http://scrapeops.country=us.headless_browser_mode={headless}.optimize_request=true:{API_KEY}@proxy.scrapeops.io:5353',
                 'no_proxy': 'localhost:127.0.0.1'
             }
@@ -289,10 +285,15 @@ class Scraper:
         self.options = webdriver.ChromeOptions()
         if HEADLESS:
             self.options.add_argument("--headless")
+        self.options.page_load_strategy = "eager"
         self.options.add_argument('--no-sandbox')
         self.options.add_argument('--disable-dev-sh-usage')
         self.options.add_argument('--blink-settings=imagesEnabled=false')
         self.options.add_argument('--ignore-certificate-errors')
+        self.options.add_argument('--disable-gpu')
+        self.options.add_argument('--disable-browser-side-navigation')
+        self.options.add_argument('enable-automation')
+        self.options.add_argument('start-maximized')
         self.driver = webdriver.Chrome(options=self.options,
                                        seleniumwire_options=proxy_options)
         self.driver.set_page_load_timeout(60 * 2)
@@ -368,13 +369,16 @@ class Scraper:
             if company:
                 wait()
                 for employee in company["employees"]:
-                    self.get_profile(employee, 2)
-                    wait()
+                    if employee not in self.database.saved_profiles:
+                        self.get_profile(employee, 2)
+                        wait()
+                    else:
+                        print("already got",employee)
 
                 employees = self.get_employees(company_id)
-                summary = summarizer.summarize_company_and_employees(company, employees)
-                print("result:")
-                print(summary)
+                business, founders = summarizer.summarize_company_and_employees(company, employees)
+                self.database.add_company_summaries(company_id, business, founders)
+                self.database.commit()
                 # get employees
 
             wait()
@@ -510,11 +514,23 @@ class Scraper:
 
     def start(self):
         self.set_cookies()
-        self.company_list_summarize(["andrepeat"])
+
         # self.profile_search(1, )
         # self.company_search(1)
         #print(self.get_company("winteria"))
         # self.get_employees("kth")
+
+        companies = [
+            #"lifesum-app",
+            "pliance",
+            "sosafe-official",
+            "simegroup",
+            #"sniph",
+            "callinganyone",
+            "karmalicious"
+        ]
+
+        self.company_list_summarize(companies)
 
 # TODO split summary text and add that to database too
 

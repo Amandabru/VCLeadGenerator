@@ -23,8 +23,9 @@ HEADLESS = True
 
 BASE_PROMPT = "YOU ARE A VENTURE CAPITALIST RESEARCHING A SPECIFIC COMPANY, WHAT IS IMPORTANT FOR YOU IS THE BUSINESS IDEA AND WHO THE FOUNDERS ARE AND WHAT THEY HAVE DONE PREVIOUSLY. "
 SEARCH_HELP_PROMPT = "Which of these urls are most likely to contain important information about the business idea and leadership of the company? RESPOND BY ONLY A LIST OF URLS, SEPARATED BY NEWLINE, MINIMUM TWO, MAXIMUM 3:"
-SUMMARIZE_PAGE_PROMPT = "Condense all important information about what this company is doing and discard unneccessary website information. You will get raw text data extracted from a webpage. RESPOND AS SHORTLY AS POSSIBLE WITHOUT REMOVING ANYTHING IMPORTANT. RESPOND ONLY WITH A SUMMARY"
-SUMMARIZE_ALL_PROMPT = "Combine inputs from the website, company linkedin and employee linkedin to create a concice summary with two headings, business and founders. Don't remove any important information, remove irrelevant information and keep it short. RESPOND ONLY WITH A SHORT AND RELEVANT SUMMARY"
+SUMMARIZE_PAGE_PROMPT = "Condense all important information about what this company is doing and discard unneccessary website information. You will get raw text data extracted from a webpage. RESPOND AS SHORTLY AS POSSIBLE WITHOUT REMOVING ANYTHING IMPORTANT. RESPOND ONLY WITH A SUMMARY. KEEP IT SHORT"
+SUMMARIZE_ALL_PROMPT = "Combine inputs from the website, company linkedin and employee linkedin to create a concice summary with two tags [BUSINESS] and [FOUNDERS]. If founder information is not available don't write anything about it, including the tag Don't remove any important information, remove irrelevant information and keep it short. RESPOND ONLY WITH A SHORT AND RELEVANT SUMMARY"
+
 
 # TODO Take a look at gpt functions and start implementing where possible
 
@@ -36,7 +37,7 @@ def gpt_summarize_all(webiste_information, linkedin_information, employee_inform
     employees = "EMPLOYEE INFORMATION:\n" + str(employee_information)
 
     print("summarizer")
-    print("website",website)
+    print("website", website)
     print("linkedin", linkedin)
     print("employees", employees)
 
@@ -105,6 +106,36 @@ def gpt(
             )
             time.sleep(10)  # Wait 10 seconds and try again
 
+def gpt4(
+        instruction_prompt: str,
+        input_prompt: str,
+        model: str = "gpt-4",
+        temperature: float = 0.5,
+        max_tokens: int = 2048,
+):
+    while True:
+        try:
+            print("sending api request")
+            messages = [{"role": "system", "content": instruction_prompt},
+                        {"role": "user", "content": input_prompt}]
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                n=1,
+                stop=None,
+            )
+
+            finish_reason = response.choices[0].finish_reason
+            message = response.choices[0].message
+            return message, finish_reason
+        except openai.error.RateLimitError:
+            print(
+                "The OpenAI API rate limit has been exceeded. Waiting 10 seconds and trying again."
+            )
+            time.sleep(10)  # Wait 10 seconds and try again
+
 
 class WebsiteScraper:
     def __init__(self):
@@ -144,15 +175,27 @@ class WebsiteScraper:
             all_info.append(self.summarize_page(url))
         return all_info
 
+    def separate_summary(self, summary):
+        business = None
+        founders = None
+        if "[BUSINESS]" in summary:
+            if "[FOUNDERS]" in summary:
+                business = summary[summary.find("[BUSINESS]") + len("[BUSINESS]"):summary.find("[FOUNDERS]")].strip()
+                founders = summary[summary.find("[FOUNDERS]") + len("[FOUNDERS]"):].strip()
+            else:
+                business = summary[summary.find("[BUSINESS]") + len("[BUSINESS]"):].strip()
+        return business, founders
+
     def summarize_company_and_employees(self, company_info, employee_info):
         url = company_info["website"]
         website_info = self.info_search(url)
         summary = gpt_summarize_all(website_info, company_info, employee_info)
-        print(summary)
-        return summary
+        business_info, founder_info = self.separate_summary(summary)
+        print(business_info)
+        print(founder_info)
+        return business_info, founder_info
 
 
 if __name__ == '__main__':
     scraper = WebsiteScraper()
     scraper.info_search("https://www.bemlo.se/")
-

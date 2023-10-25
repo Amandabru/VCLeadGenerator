@@ -16,7 +16,7 @@ class Database:
 
         self.con.execute("CREATE TABLE IF NOT EXISTS profile(profile_id TEXT UNIQUE, name TEXT, saved BOOLEAN)")
         self.con.execute(
-            "CREATE TABLE IF NOT EXISTS company(company_id TEXT, name TEXT, industry TEXT, size INTEGER, description TEXT, website TEXT, saved BOOLEAN)")
+            "CREATE TABLE IF NOT EXISTS company(company_id TEXT UNIQUE, name TEXT, industry TEXT, size INTEGER, description TEXT, business_summary TEXT, founder_summary TEXT, website TEXT, saved BOOLEAN)")
         self.con.execute(
             "CREATE TABLE IF NOT EXISTS experience(profile_id TEXT, company_id TEXT, role TEXT, start_date DATE, end_date DATE)")
         self.con.execute(
@@ -51,14 +51,28 @@ class Database:
         if company_info:
             company_name = company_info["name"]
             company_industry = company_info["industry"]
-            company_size = company_info["size"]
-            company_description = company_info["description"]
+            company_size = int(company_info["size"])
+            company_description = company_info["description"]  # Reason for crash is quoutes in desc
             company_website = company_info["website"]
             self.con.execute(
-                f"INSERT OR REPLACE INTO company (company_id, name, industry, size, description, website, saved) VALUES ('{company_id}', '{company_name}', '{company_industry}', {company_size}, '{company_description}',  '{company_website}', true)")
+                "INSERT OR REPLACE INTO company (company_id, name, industry, size, description, website, saved) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (company_id, company_name, company_industry, company_size, company_description, company_website, 1)
+            )
             if company_id in self.potential_companies:
                 self.potential_companies.remove(company_id)
             self.saved_companies.add(company_id)
+
+    def add_company_summaries(self, company_id, business, founders):
+        if business and founders:
+            self.con.execute(
+                "UPDATE company SET business_summary=?, founder_summary=? WHERE company_id=?",
+                (business, founders, company_id)
+            )
+        elif business:
+            self.con.execute(
+                "UPDATE company SET business_summary=? WHERE company_id=?",
+                (business, company_id)
+            )
 
     def get_employee_info(self, company_id):  # What info do we need here - the employees and all of their experience
         employees = {}
@@ -91,37 +105,60 @@ class Database:
                 if row[2]:
                     experience_string += "Degree: " + row[2] + " "
                 employees[profile_id].append(experience_string)
-        print(employees)
         return employees
 
     def add_profile(self, profile_id, saved, name=None):
-        self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id, saved) VALUES ('{profile_id}', {saved})")
+        # First query
+        self.con.execute(
+            "INSERT OR REPLACE INTO profile (profile_id, saved) VALUES (?, ?)",
+            (profile_id, saved)
+        )
+
+        # Second query
         if saved and name:
             self.con.execute(
-                f"INSERT OR REPLACE INTO profile (profile_id, name, saved) VALUES ('{profile_id}','{name}', {saved})")
+                "INSERT OR REPLACE INTO profile (profile_id, name, saved) VALUES (?, ?, ?)",
+                (profile_id, name, saved)
+            )
             self.saved_profiles.add(profile_id)
             if profile_id in self.potential_profiles:
                 self.potential_profiles.remove(profile_id)
         else:
-            self.con.execute(f"INSERT OR REPLACE INTO profile (profile_id, saved) VALUES ('{profile_id}', {saved})")
+            self.con.execute(
+                "INSERT OR REPLACE INTO profile (profile_id, saved) VALUES (?, ?)",
+                (profile_id, saved)
+            )
             if profile_id not in self.saved_profiles:
                 self.potential_profiles.add(profile_id)
 
     def add_experience(self, profile_id, company_id, role, start_date, end_date):
 
+        # First case
         if not start_date or not end_date:
             self.con.execute(
-                f"INSERT INTO experience (profile_id, company_id, role) VALUES ('{profile_id}', '{company_id}', '{role}')")
+                "INSERT INTO experience (profile_id, company_id, role) VALUES (?, ?, ?)",
+                (profile_id, company_id, role)
+            )
+
+        # Second case
         elif not end_date:
             self.con.execute(
-                f"INSERT INTO experience (profile_id, company_id, role, start_date) VALUES ('{profile_id}', '{company_id}', '{role}', '{start_date}')")
+                "INSERT INTO experience (profile_id, company_id, role, start_date) VALUES (?, ?, ?, ?)",
+                (profile_id, company_id, role, start_date)
+            )
+
+        # Third case
         else:
             self.con.execute(
-                f"INSERT INTO experience (profile_id, company_id, role, start_date, end_date) VALUES ('{profile_id}', '{company_id}', '{role}', '{start_date}', '{end_date}')")
+                "INSERT INTO experience (profile_id, company_id, role, start_date, end_date) VALUES (?, ?, ?, ?, ?)",
+                (profile_id, company_id, role, start_date, end_date)
+            )
 
     def add_education(self, profile_id, school_name, degree):
         self.con.execute(
-            f"INSERT INTO education (profile_id, school_name, degree) VALUES ('{profile_id}', '{school_name}', '{degree}')")
+            "INSERT INTO education (profile_id, school_name, degree) VALUES (?, ?, ?)",
+            (profile_id, school_name, degree)
+        )
 
     def commit(self):
         self.con.commit()
