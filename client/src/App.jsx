@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import StartPage from './pages/StartPage';
 import ProfilePage from './pages/ProfilePage';
-import SavedPage from './pages/SavedPage';
+import LikedPage from './pages/LikedPage';
 import ExplorePage from './pages/ExplorePage';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage/>} />
         <Route path="/profile" element={<ProfilePage/>} />
-        <Route path="/saved" element={<SavedPage/>} />
+        <Route path="/saved" element={<LikedPage/>} />
         <Route path="/explore" element={<ExplorePage/>} />
       </Routes>
       </div>

@@ -1,0 +1,17 @@
+.outer-div{
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.liked-card-container{
+    border: solid 396359;
+    line-height: 1rem;
+    width: 50rem;
+    text-align: left;
+    background-color: #396359;
+    border-radius: 1rem;
+    padding-left: 2rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.248);
+    cursor: pointer;
+}
