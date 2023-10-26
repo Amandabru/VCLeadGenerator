@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import './NavBar.css';
+import {IoSettingsOutline} from 'react-icons/io5';
 
 function NavBar() {
  
@@ -13,8 +14,10 @@ function NavBar() {
             <li>
                 <Link to="/saved">Liked</Link>
             </li>
-            <li>
-                <Link to="/profile">Profile</Link>
+            <li className="settings">
+                <Link to="/profile">
+                    <IoSettingsOutline size={22}/>
+                </Link>
             </li>
         </ul>
        </nav>
