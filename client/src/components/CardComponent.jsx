@@ -79,11 +79,11 @@ function CardComponent() {
           <CardContent>
             <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
-            <ul className={`custom-list ${isClicked ? 'move-left' : ''}`}>
+            <ul className="custom-list">
                 <li> <CgProfile/><a href="#1" onClick={handleNameClick}> Bo Tunnquist</a></li>
-                <li><CgProfile/><a href="#1"> Janne Jansson</a></li>
-                <li><CgProfile/><a href="#1"> Sofia Andersson</a></li>
-                <li><CgProfile/><a href="#1"> Kalle Karlsson</a></li>
+                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Janne Jansson</a></li>
+                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Sofia Andersson</a></li>
+                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Kalle Karlsson</a></li>
             </ul>
             </Typography>
           </CardContent>
