@@ -2,8 +2,20 @@ import CardComponent from "../components/CardComponent";
 import './ExplorePage.css';
 import {RxCross2} from 'react-icons/rx';
 import {AiOutlineHeart} from 'react-icons/ai';
+import { useState, useEffect } from 'react';
+import { getCompanies } from '../api/getCompanies';
 
 function ExplorePage() {
+    const [companies, setCompanies] = useState([]);
+
+    useEffect(() => {
+      const amount = 3;
+      getCompanies(amount)
+        .then((data) => setCompanies(data))
+        .catch((error) => console.error('Error:', error));
+    }, []);
+
+
     return (
         <div className="explore-container">
             <CardComponent/>
