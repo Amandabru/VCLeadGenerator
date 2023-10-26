@@ -6,7 +6,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-right: 4rem;
+    margin-right: 1rem;
     margin-left: 1rem;
 }
 
@@ -72,3 +72,6 @@ nav ul li a:hover::before, nav .title:hover::before{
     transform: scaleX(1);
 }
 
+.settings{
+    margin-left: 3rem;
+}
