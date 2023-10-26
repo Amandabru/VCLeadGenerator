@@ -1,0 +1,21 @@
+.start-page-container{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.inner-div{
+    max-width: 50rem; 
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 4rem;
+}
+
+
+h1, p {
+    text-align: left;
+}
+
+h1{
+    font-size: 2.5rem;
+}
