@@ -1,17 +1,36 @@
 .outer-div{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 3rem;
+    align-items: center; 
+    margin-top: 1rem;
 }
 
 .liked-card-container{
     border: solid 396359;
     line-height: 1rem;
-    width: 50rem;
+    width: 40rem;
     text-align: left;
     background-color: #396359;
     border-radius: 1rem;
     padding-left: 2rem;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.248);
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: box-shadow 0.4s ease;
+}
+
+.liked-card-container:hover{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.451);
+}
+
+.company-name{
+    font-size: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 2rem;
 }

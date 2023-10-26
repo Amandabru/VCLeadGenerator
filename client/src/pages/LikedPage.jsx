@@ -4,6 +4,11 @@ function SavedPage() {
     return (
         <div>
            <LikedCard/>
+           <LikedCard/>
+           <LikedCard/>
+           <LikedCard/>
+           <LikedCard/>
+           <LikedCard/>
         </div>
     );
 }

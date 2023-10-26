@@ -1,17 +1,25 @@
 import './LikedCardComponent.css';
+import {AiTwotoneHeart} from 'react-icons/ai';
+
 
 function LikedCard() {
     return (
         <div className='outer-div'>
             <div className='liked-card-container'>
-                <h1>
-                    Company name
-                </h1>
+                <div className='header'>
+                    <h1 className='company-name'>
+                        Company name
+                    </h1>
+                    <AiTwotoneHeart size={30} color="#58A894"/>
+                </div>
                 <p>
-                    fkjewnvd
+                    Nr of employees: 4
                 </p>
                 <p>
-                    kjfnkejvndv
+                    Founded in 2022
+                </p>
+                <p>
+                    Company LinkedIn
                 </p>
             </div>
         </div>

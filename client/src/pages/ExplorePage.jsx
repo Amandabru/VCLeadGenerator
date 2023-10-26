@@ -1,7 +1,7 @@
 import CardComponent from "../components/CardComponent";
 import './ExplorePage.css';
 import {RxCross2} from 'react-icons/rx';
-import {AiOutlineHeart} from 'react-icons/ai'
+import {AiOutlineHeart} from 'react-icons/ai';
 
 function ExplorePage() {
     return (

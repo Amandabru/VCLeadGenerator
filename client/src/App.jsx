@@ -8,7 +8,6 @@ import LikedPage from './pages/LikedPage';
 import ExplorePage from './pages/ExplorePage';
 
 function App() {
-  // const [count, setCount] = useState(0)
 
   return (
     <>
