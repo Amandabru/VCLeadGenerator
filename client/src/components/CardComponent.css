@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 
+
 .left-side {
     background-color: #235347;
     transition: background-color 1s;
@@ -52,7 +53,7 @@
     font-size: 1rem;
 }
   
-.custom-list li {
+.custom-list li, .divider {
     list-style: none;
     padding: 0;
     color: white;
@@ -62,7 +63,7 @@
     font-family: 'Poppins', sans-serif;
 }
   
-.custom-list li::after {
+.custom-list li::after, .divider::after{
     content: "";
     position: absolute;
     left: 0;
@@ -93,5 +94,3 @@ ul li a:hover{
     padding-left: 0.4rem;
     padding-right: 0.4rem;
 }
-
-

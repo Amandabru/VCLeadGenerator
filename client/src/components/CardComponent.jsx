@@ -14,7 +14,7 @@ function CardComponent() {
 
     const handleNameClick = () => {
       setIsClicked(true);
-    }
+    };
 
     return (
         <Card
@@ -31,7 +31,7 @@ function CardComponent() {
         }}
       >
         <CardOverflow
-          className={`${isClicked ? 'left-side2' : 'left-side'}`}
+          className={`animation ${isClicked ? 'left-side2' : 'left-side'}`}
           sx={{
             flex: '0 0 30rem',
             display: 'flex',
@@ -74,6 +74,48 @@ function CardComponent() {
                 </Typography>
             </div>
             )}
+
+          {isClicked && (
+            <div style={{ zIndex: 999 }}>
+              <AspectRatio sx={{ mt: 7 }} ratio="19/8" objectFit="contain" variant="plain">
+                  <img
+                  alt=""
+                  src="https://static.vecteezy.com/system/resources/previews/006/409/485/original/people-thinking-to-make-decision-problem-solving-and-find-creative-ideas-with-question-mark-in-flat-cartoon-background-for-poster-illustration-vector.jpg"
+                  />
+              </AspectRatio>
+              <div className="divider" style={{ display: 'flex', marginTop: '2rem', marginLeft:'4rem', flexDirection: 'column'}}>
+                <Typography fontFamily="'Poppins', sans-serif" fontSize="xl2" textColor="#fff" >
+                    Bo Tunnquist
+                </Typography>
+                <Typography sx={{ marginBottom:'1rem'}} fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  50 years old
+                </Typography>
+              </div>
+              <div className='divider' style={{ display: 'flex', flexDirection: 'column', marginLeft:'4rem'}}>
+                <Typography fontSize="1rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  Previous job roles
+                </Typography>
+                <Typography  fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  VIP of commercial
+                </Typography>
+                <Typography sx={{ marginBottom:'1rem'}} fontSize="0.7rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  Atlas Copco
+                </Typography>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', marginLeft:'4rem'}}>
+              <Typography fontSize="1rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  Highest education
+                </Typography>
+                <Typography  fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  Master of Science in Industrial Economy
+                </Typography>
+                <Typography sx={{ marginBottom:'1rem'}} fontSize="0.7rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
+                  Atlas Copco
+                </Typography>
+              </div>
+
+            </div>
+          )}
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
