@@ -7,6 +7,7 @@ import './CardComponent.css';
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlinePlace } from 'react-icons/md';
 import { useState } from 'react';
+import { IoChevronBackOutline } from 'react-icons/io5';
 
 function CardComponent() {
 
@@ -14,6 +15,10 @@ function CardComponent() {
 
     const handleNameClick = () => {
       setIsClicked(true);
+    };
+
+    const handleBackClick = () => {
+      setIsClicked(false);
     };
 
     return (
@@ -77,7 +82,8 @@ function CardComponent() {
 
           {isClicked && (
             <div style={{ zIndex: 999 }}>
-              <AspectRatio sx={{ mt: 7 }} ratio="19/8" objectFit="contain" variant="plain">
+              <IoChevronBackOutline color="#fff" onClick={handleBackClick} style={{cursor:'pointer'}}/>
+              <AspectRatio sx={{ mt: 4 }} ratio="19/8" objectFit="contain" variant="plain">
                   <img
                   alt=""
                   src="https://static.vecteezy.com/system/resources/previews/006/409/485/original/people-thinking-to-make-decision-problem-solving-and-find-creative-ideas-with-question-mark-in-flat-cartoon-background-for-poster-illustration-vector.jpg"
