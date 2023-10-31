@@ -1,14 +1,14 @@
 import LikedCard from "../components/LikedCardComponent";
+import { useSelector } from 'react-redux';
 
 function SavedPage() {
+    const savedCompanies = useSelector((state) => state.savedCompanies);
+
     return (
         <div>
-           <LikedCard/>
-           <LikedCard/>
-           <LikedCard/>
-           <LikedCard/>
-           <LikedCard/>
-           <LikedCard/>
+            {savedCompanies.map((company) => (
+                <LikedCard key={company.name} company={company} />
+            ))}
         </div>
     );
 }

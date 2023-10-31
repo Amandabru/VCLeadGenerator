@@ -4,8 +4,11 @@ import {RxCross2} from 'react-icons/rx';
 import {AiOutlineHeart} from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { saveCompany } from '../redux/features/savedCompaniesSlice.js';
 
 function ExplorePage() {
+    const dispatch = useDispatch();
     const companies = useSelector((state) => state.card.companies);
 
     const [currentCompanyIndex, setCurrentCompanyIndex] = useState(0);
@@ -18,6 +21,10 @@ function ExplorePage() {
   
     const currentCompany = companies[currentCompanyIndex];
 
+    const handleSaveClick = () => {
+        dispatch(saveCompany(currentCompany));
+    };
+
     return (
         <div className="explore-container">
             <CardComponent company={currentCompany}/>
@@ -25,7 +32,7 @@ function ExplorePage() {
                 <button className="remove-button" onClick={showNextCompany}>
                     <RxCross2 color="black" size={30}/>
                 </button>
-                <button className="save-button" onClick={showNextCompany}>
+                <button className="save-button" onClick={() => { showNextCompany(); handleSaveClick(); }}>
                     <AiOutlineHeart color="#58A894" size={30}/>
                 </button>
             </div>
