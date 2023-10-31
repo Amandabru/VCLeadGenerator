@@ -37,7 +37,7 @@ function CardComponent({company})  {
         }}
       >
         <CardOverflow
-          className={`animation ${isClicked ? 'left-side2' : 'left-side'}`}
+          className={`animation ${isClicked ? 'left-side-alt' : 'left-side'}`}
           sx={{
             flex: '0 0 30rem',
             display: 'flex',
