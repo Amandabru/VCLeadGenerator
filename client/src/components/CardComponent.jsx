@@ -9,7 +9,7 @@ import { MdOutlinePlace } from 'react-icons/md';
 import { useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
-function CardComponent() {
+function CardComponent({company})  {
 
     const [isClicked, setIsClicked] = useState(false);
 
@@ -20,6 +20,7 @@ function CardComponent() {
     const handleBackClick = () => {
       setIsClicked(false);
     };
+
 
     return (
         <Card
@@ -36,7 +37,7 @@ function CardComponent() {
         }}
       >
         <CardOverflow
-          className={`animation ${isClicked ? 'left-side2' : 'left-side'}`}
+          className={`animation ${isClicked ? 'left-side-alt' : 'left-side'}`}
           sx={{
             flex: '0 0 30rem',
             display: 'flex',
@@ -48,7 +49,7 @@ function CardComponent() {
         {!isClicked && (
             <div>
                 <Typography fontFamily="'Poppins', sans-serif" fontSize="xl4" fontWeight="xl" textColor="#fff">
-                    QuantumFleet
+                    {company.name}
                 </Typography>
                 <AspectRatio sx={{ mt: 1 }} ratio="19/8" objectFit="contain" variant="plain">
                     <img
@@ -57,20 +58,20 @@ function CardComponent() {
                     />
                 </AspectRatio>
                 <div style={{display: 'flex', alignItems: 'center', }}>
-                    <Typography className="tag" fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginRight: '1rem' }}>
-                        TRANSPORTATION
+                    <Typography className="tag" fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5 }}>
+                        {company.industry}
                     </Typography>
-                    <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginLeft: '8rem', marginRight: '1rem' }}>
-                        <MdOutlinePlace size={15}/> Stockholm
-                    </Typography>
-                    <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5}}>
-                        Founded in 2022
-                    </Typography>
+                    <div style={{ display: 'flex', flexDirection:'row', marginLeft: 'auto', alignItems: 'center', marginRight: '1rem'}}>
+                      <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5}}>
+                          <MdOutlinePlace size={15}/> Stockholm
+                      </Typography>
+                      <Typography fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 5, marginLeft: '1rem'}}>
+                          Founded in 2022
+                      </Typography>
+                    </div>
                 </div>
                 <Typography fontSize="0.9rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
-                    QuantumFleet is revolutionizing the transportation industry by developing a fleet of quantum-powered vehicles. 
-                    Our cutting-edge quantum technology allows for near-instantaneous travel between locations, 
-                    drastically reducing commute times and carbon emissions.
+                    {company.description}
                 </Typography>
                 <Typography fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 4 }}>
                     <a href="">
@@ -125,7 +126,7 @@ function CardComponent() {
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
-            <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  -4</Typography>
+            <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  - {company.size}</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
                 <li> <CgProfile/><a href="#1" onClick={handleNameClick}> Bo Tunnquist</a></li>

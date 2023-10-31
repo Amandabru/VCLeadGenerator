@@ -28,62 +28,10 @@
 
 .remove-button:hover{
   border-color: black;
-  background-color: rgba(0, 0, 0, 0.284);
+  background-color: rgba(101, 101, 101, 0.284)
 }
 
 .save-button:hover{
   border-color: #58A894;
-  background-color: #58a8944c;
+  background-color: #c2f9eb;
 }
-
-
-/*
-.slide {
-  position: relative;
-  overflow: hidden;
-  background: white;
-  color: black;
-  line-height: 1;
-  border-color: black;
-  transition: background 0.3s;
-}
-
-.slide::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: 0;
-  background: black;
-  transition: width 0.5s;
-}
-
-.slide2 {
-  position: relative;
-  overflow: hidden;
-  background: white;
-  color: #58A894;
-  line-height: 1;
-  border-color: #58A894;
-  transition: background 0.3s;
-}
-
-.slide2::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  background: #58A894;
-  transition: width 0.5s;
-}
-
-.slide:hover::before,
-.slide:focus::before,
-.slide2:hover::before,
-.slide2:focus::before{
-  border-color: black !important;
-  width: 100%;
-} */

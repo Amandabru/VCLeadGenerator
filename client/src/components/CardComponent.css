@@ -5,11 +5,11 @@
     background-color: #235347;
     transition: background-color 1s;
 }
-.left-side2 {
+.left-side-alt {
     background-color: #235347;
   }
 
-.left-side2::before {
+.left-side-alt::before {
     content: "";
     position: absolute;
     left: 100%;
