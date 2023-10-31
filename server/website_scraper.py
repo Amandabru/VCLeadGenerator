@@ -1,3 +1,4 @@
+import math
 import os
 import time
 from urllib.parse import urljoin
@@ -21,10 +22,11 @@ openai.api_key = OPENAI_API_KEY
 
 HEADLESS = True
 
-BASE_PROMPT = "YOU ARE A VENTURE CAPITALIST RESEARCHING A SPECIFIC COMPANY, WHAT IS IMPORTANT FOR YOU IS THE BUSINESS IDEA AND WHO THE FOUNDERS ARE AND WHAT THEY HAVE DONE PREVIOUSLY. "
+BASE_PROMPT = "YOU ARE A VENTURE CAPITALIST RESEARCHING A SPECIFIC COMPANY, WHAT IS IMPORTANT FOR YOU IS THE BUSINESS IDEA AND WHO THE FOUNDERS ARE AND WHAT THEY HAVE DONE PREVIOUSLY."
 SEARCH_HELP_PROMPT = "Which of these urls are most likely to contain important information about the business idea and leadership of the company? RESPOND BY ONLY A LIST OF URLS, SEPARATED BY NEWLINE, MINIMUM TWO, MAXIMUM 3:"
 SUMMARIZE_PAGE_PROMPT = "Condense all important information about what this company is doing and discard unneccessary website information. You will get raw text data extracted from a webpage. RESPOND AS SHORTLY AS POSSIBLE WITHOUT REMOVING ANYTHING IMPORTANT. RESPOND ONLY WITH A SUMMARY. KEEP IT SHORT"
 SUMMARIZE_ALL_PROMPT = "Combine inputs from the website, company linkedin and employee linkedin to create a concice summary with two tags [BUSINESS] and [FOUNDERS]. If founder information is not available don't write anything about it, including the tag Don't remove any important information, remove irrelevant information and keep it short. RESPOND ONLY WITH A SHORT AND RELEVANT SUMMARY"
+REDUCE_SIZE_PROMPT = "SHORTEN THESE PIECES OF INFORMATION AS MUCH AS POSSIBLE WITHOUT REMOVING ANYTHING IMPORTANT"
 
 
 # TODO Take a look at gpt functions and start implementing where possible
@@ -41,12 +43,32 @@ def gpt_summarize_all(webiste_information, linkedin_information, employee_inform
     print("linkedin", linkedin)
     print("employees", employees)
 
-    message, reason = gpt(BASE_PROMPT + SUMMARIZE_ALL_PROMPT, website + linkedin + employees)
+    prompt = (website + linkedin + employees)
+    full_prompt = BASE_PROMPT + SUMMARIZE_ALL_PROMPT + prompt
+    full_prompt_words = full_prompt.split()
+    full_prompt_tokens = math.ceil(len(full_prompt_words) * 2.5)
+    words_to_remove = max(0, full_prompt_tokens - 8192)
+    print(full_prompt_tokens, words_to_remove)
+    if words_to_remove > 0:
+        prompt_words = prompt.split()
+        prompt = " ".join(prompt_words[:len(prompt_words) - words_to_remove])
+
+    message, reason = gpt4(BASE_PROMPT + SUMMARIZE_ALL_PROMPT, prompt)
     return message["content"].strip()
 
 
 def gpt_summarize_page(soup):
-    message, reason = gpt(BASE_PROMPT + SUMMARIZE_PAGE_PROMPT, soup.text.strip())
+    prompt = soup.text.strip()
+    full_prompt = BASE_PROMPT + SUMMARIZE_PAGE_PROMPT + prompt
+    full_prompt_words = full_prompt.split()
+    full_prompt_tokens = math.ceil(len(full_prompt_words) * 2.5)
+    words_to_remove = max(0, full_prompt_tokens - 4096)
+    print(full_prompt_tokens, words_to_remove)
+    if words_to_remove > 0:
+        prompt_words = prompt.split()
+        prompt = " ".join(prompt_words[:len(prompt_words) - words_to_remove])
+
+    message, reason = gpt(BASE_PROMPT + SUMMARIZE_PAGE_PROMPT, prompt)
     return message["content"].strip()
 
 
@@ -106,12 +128,13 @@ def gpt(
             )
             time.sleep(10)  # Wait 10 seconds and try again
 
+
 def gpt4(
         instruction_prompt: str,
         input_prompt: str,
         model: str = "gpt-4",
         temperature: float = 0.5,
-        max_tokens: int = 2048,
+        max_tokens: int = 1024,
 ):
     while True:
         try:

@@ -87,7 +87,7 @@ class Database:
                 employee_string += "Name: " + profile_row[0]
             employees[profile_id].append(employee_string)
 
-            for row in self.cursor.execute(f"SELECT * FROM experience WHERE profile_id='{profile_id}'").fetchall():
+            for row in self.cursor.execute(f"SELECT * FROM experience WHERE profile_id='{profile_id}'").fetchmany(5):
                 experience_string = "Experience:  "
                 if row[1]:
                     experience_string += "Company: " + row[1] + " "
@@ -98,7 +98,7 @@ class Database:
                 if row[4]:
                     experience_string += "Ended: " + row[4] + " "
                 employees[profile_id].append(experience_string)
-            for row in self.cursor.execute(f"SELECT * FROM education WHERE profile_id='{profile_id}'").fetchall():
+            for row in self.cursor.execute(f"SELECT * FROM education WHERE profile_id='{profile_id}'").fetchmany(3):
                 experience_string = "Education:  "
                 if row[1]:
                     experience_string += "School: " + row[1] + " "

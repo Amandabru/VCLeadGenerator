@@ -51,6 +51,7 @@ valid_locations = {
     "stockholm", "solna", "kista", "gothenburg"
 }
 
+
 def extract_related_profiles(soup):
     profiles = set()
     related_profile_parent = soup.find("div", {"class": "aside-profiles-list"})
@@ -419,13 +420,14 @@ class Scraper:
                 for education in education_experience:
                     school = education["school"]
                     degree = education["degree"]
-                    self.database.add_education(profile_id, school, degree)  # s error here??!??! something sqlite but idk
+                    self.database.add_education(profile_id, school,
+                                                degree)  # s error here??!??! something sqlite but idk
 
                 # Enter that data has been saved in profile db
                 print("getting name")
                 name = extract_profile_name(soup)
                 if not name:
-                    name = profile_id.replace("-"," ")
+                    name = profile_id.replace("-", " ")
                 self.database.add_profile(profile_id, True, name)
 
                 # Get related profiles and insert potential future profiles into database
@@ -517,20 +519,30 @@ class Scraper:
 
         # self.profile_search(1, )
         # self.company_search(1)
-        #print(self.get_company("winteria"))
+        # print(self.get_company("winteria"))
         # self.get_employees("kth")
 
         companies = [
-            #"lifesum-app",
-            #"pliance",
-            #"sosafe-official",
-            #"simegroup",
-            #"sniph",
-            #"callinganyone",
+            # "emsense",
+            # "tomta-ai",
+            "stabelo",
+            "atomler",
+            "edventuresai",
+            "vaquitatech",
+            "logwise-ab",
+            "cemvision-ab",
+            "scapinlabs",
+            "lifesum-app",
+            "pliance",
+            "sosafe-official",
+            "simegroup",
+            "sniph",
+            "callinganyone",
             "karmalicious"
         ]
 
         self.company_list_summarize(companies)
+
 
 if __name__ == '__main__':
     scraper = Scraper()
