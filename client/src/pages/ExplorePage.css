@@ -16,24 +16,24 @@
   background-color:white;
   line-height: 1;
   border-color: black;
-  transition: box-shadow 0.2s ease;
+  transition: background-color 0.2s ease;
 }
   
 .save-button{
   background-color:white;
   line-height: 1;
   border-color: #58A894;
-  transition: box-shadow 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .remove-button:hover{
   border-color: black;
-  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.451);
+  background-color: rgba(0, 0, 0, 0.284);
 }
 
 .save-button:hover{
   border-color: #58A894;
-  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.451);
+  background-color: #58a8944c;
 }
 
 
