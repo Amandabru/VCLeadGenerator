@@ -22,6 +22,7 @@ function ExplorePage() {
         setCurrentCompanyIndex((prevIndex) =>
         prevIndex === unsavedCompanies.length - 1 ? 0 : prevIndex + 1
       );
+      swipeToLeft();
     };
 
     let currentCompany;
@@ -39,7 +40,35 @@ function ExplorePage() {
         if(unsavedCompanies.length == 2){
             setCurrentCompanyIndex(0);
         }
+        swipeToRight();
     };
+
+    const swipeToLeft = () =>{
+        const cardElement = document.querySelector('.card');
+        cardElement.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
+        cardElement.style.transform = 'translateX(-100%)';
+        cardElement.style.opacity = 0;
+
+        setTimeout(() => {
+            cardElement.style.transition = '';
+            cardElement.style.transform = '';
+            cardElement.style.opacity = '';
+        }, 400);
+    };
+
+    const swipeToRight = () =>{
+        const cardElement = document.querySelector('.card');
+        cardElement.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
+        cardElement.style.transform = 'translateX(100%)';
+        cardElement.style.opacity = 0;
+
+        setTimeout(() => {
+            cardElement.style.transition = '';
+            cardElement.style.transform = '';
+            cardElement.style.opacity = '';
+        }, 400);
+    };
+
 
     const containerStyle = {
         display: "flex",
@@ -79,7 +108,7 @@ function ExplorePage() {
                 <button className="remove-button" onClick={showNextCompany}>
                     <RxCross2 color="black" size={30}/>
                 </button>
-                <button className="save-button" onClick={() => {  handleSaveClick(); }}>
+                <button className="save-button" onClick={handleSaveClick}>
                     <AiOutlineHeart color="#58A894" size={30}/>
                 </button>
             </div>

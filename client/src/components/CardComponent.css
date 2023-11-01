@@ -7,7 +7,8 @@
 }
 .left-side-alt {
     background-color: #235347;
-  }
+    overflow: hidden;
+}
 
 .left-side-alt::before {
     content: "";

@@ -22,6 +22,7 @@ function CardComponent({company})  {
     };
 
     return (
+      <div className='card'>
         <Card
         size="lg"
         orientation="horizontal"
@@ -138,6 +139,7 @@ function CardComponent({company})  {
 
         </CardContent>
       </Card>
+      </div>
     );
 }
 

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store.js';
 import { fetchCompanies } from './redux/features/cardSlice.js';
 
-store.dispatch(fetchCompanies(3));
+store.dispatch(fetchCompanies(7));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
