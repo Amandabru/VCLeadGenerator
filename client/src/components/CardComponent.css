@@ -94,3 +94,7 @@ ul li a:hover{
     padding-left: 0.4rem;
     padding-right: 0.4rem;
 }
+
+.website:hover {
+    color: black !important;
+}

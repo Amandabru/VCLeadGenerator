@@ -21,7 +21,6 @@ function CardComponent({company})  {
       setIsClicked(false);
     };
 
-
     return (
         <Card
         size="lg"
@@ -73,8 +72,8 @@ function CardComponent({company})  {
                 <Typography fontSize="0.77rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
                     {company.description}
                 </Typography>
-                <Typography fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 4 }}>
-                    <a href="">
+                <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 3 }}>
+                    <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
                         Link to Website
                     </a>
                 </Typography>
