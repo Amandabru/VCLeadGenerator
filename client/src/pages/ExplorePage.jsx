@@ -7,21 +7,37 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { saveCompany } from '../redux/features/savedCompaniesSlice.js';
 import BeatLoader from "react-spinners/BeatLoader";
+import selectUnsavedCompanies from '../redux/features/selectUnsavedCompanies';
+
 
 function ExplorePage() {
     const dispatch = useDispatch();
-    const companies = useSelector((state) => state.card.companies);
+    // const companies = useSelector((state) => state.card.companies);
+    const unsavedCompanies = useSelector(selectUnsavedCompanies);
     const loading = useSelector((state) => state.card.loading);
 
     const [currentCompanyIndex, setCurrentCompanyIndex] = useState(0);
 
     const showNextCompany = () => {
-      setCurrentCompanyIndex((prevIndex) =>
-        prevIndex === companies.length - 1 ? 0 : prevIndex + 1
+      if(unsavedCompanies.length > 0) {
+        setCurrentCompanyIndex((prevIndex) =>
+        prevIndex === unsavedCompanies.length - 1 ? 0 : prevIndex + 1
       );
+      }
     };
-  
-    const currentCompany = companies[currentCompanyIndex];
+    
+    let currentCompany;
+    if(unsavedCompanies.length > 0) {
+        currentCompany = unsavedCompanies[currentCompanyIndex];
+    }
+    else{
+        return <div style={{display:'flex', flexDirection:'column', alignItems: 'center', marginTop: '12rem'}}>
+            <p className="text">
+                There are no more startups that you haven't already liked.
+            </p>
+        </div>;
+    }
+
 
     const handleSaveClick = () => {
         dispatch(saveCompany(currentCompany));

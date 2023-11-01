@@ -35,3 +35,9 @@
   border-color: #58A894;
   background-color: #c2f9eb;
 }
+
+.text{
+  color: black;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+}
