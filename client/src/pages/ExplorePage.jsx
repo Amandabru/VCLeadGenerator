@@ -6,10 +6,12 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { saveCompany } from '../redux/features/savedCompaniesSlice.js';
+import BeatLoader from "react-spinners/BeatLoader";
 
 function ExplorePage() {
     const dispatch = useDispatch();
     const companies = useSelector((state) => state.card.companies);
+    const loading = useSelector((state) => state.card.loading);
 
     const [currentCompanyIndex, setCurrentCompanyIndex] = useState(0);
 
@@ -24,6 +26,27 @@ function ExplorePage() {
     const handleSaveClick = () => {
         dispatch(saveCompany(currentCompany));
     };
+
+    const containerStyle = {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+    };
+
+
+    if (loading) {
+        return <div style={containerStyle}>
+        <BeatLoader
+            color={'#58A894'}
+            loading={true}
+            size={15}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+        />
+        </div>;
+    }
 
     return (
         <div className="explore-container">

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { getCompanies } from  '../../api/getCompanies.js';
+import getCompanies from  '../../api/getCompanies';
 
-
+/*
 const cardSlice = createSlice({
     name: 'card',
     initialState: {
@@ -52,10 +52,10 @@ const cardSlice = createSlice({
         state.error = action.payload;
       },
     },
-  });
+  });*/
 
 
-/*const initialState = {
+const initialState = {
     companies: [],
     loading: false,
     error: null,
@@ -93,7 +93,7 @@ export const fetchCompanies = (amount) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchFailure(error.message));
   }
-};*/
+};
 
 
 export default cardSlice.reducer;

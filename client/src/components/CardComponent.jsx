@@ -70,7 +70,7 @@ function CardComponent({company})  {
                       </Typography>
                     </div>
                 </div>
-                <Typography fontSize="0.9rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
+                <Typography fontSize="0.77rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
                     {company.description}
                 </Typography>
                 <Typography fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 4 }}>

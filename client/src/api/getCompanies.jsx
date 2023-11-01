@@ -1,7 +1,6 @@
-
 async function getCompanies(amount) {
   try {
-    const response = await fetch(`/fetch/${amount}`);
+    const response = await fetch(`http://localhost:8000/fetch/${amount}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

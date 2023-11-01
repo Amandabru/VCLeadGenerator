@@ -2,6 +2,7 @@ import sqlite3
 from pydantic import BaseModel
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 db = "dev"
 
@@ -18,6 +19,13 @@ class Company(BaseModel):
     founders: str | None = None
     website: str
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/fetch/{amount}")
 async def fetch(amount) -> list[Company]:

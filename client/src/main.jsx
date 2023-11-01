@@ -5,9 +5,9 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store.js';
-//import { fetchCompanies } from './redux/features/cardSlice.js';
+import { fetchCompanies } from './redux/features/cardSlice.js';
 
-//store.dispatch(fetchCompanies(3));
+store.dispatch(fetchCompanies(2));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
