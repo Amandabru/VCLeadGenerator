@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import store from '../store';
 
 const selectAllCompanies = (state) => state.card.companies;
 const selectSavedCompanies = (state) => state.savedCompanies;

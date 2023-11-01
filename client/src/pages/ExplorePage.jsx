@@ -19,28 +19,26 @@ function ExplorePage() {
     const [currentCompanyIndex, setCurrentCompanyIndex] = useState(0);
 
     const showNextCompany = () => {
-      if(unsavedCompanies.length > 0) {
         setCurrentCompanyIndex((prevIndex) =>
         prevIndex === unsavedCompanies.length - 1 ? 0 : prevIndex + 1
       );
-      }
     };
-    
+
     let currentCompany;
     if(unsavedCompanies.length > 0) {
         currentCompany = unsavedCompanies[currentCompanyIndex];
     }
-    else{
-        return <div style={{display:'flex', flexDirection:'column', alignItems: 'center', marginTop: '12rem'}}>
-            <p className="text">
-                There are no more startups that you haven't already liked.
-            </p>
-        </div>;
+    else {
+        currentCompany = null;
     }
 
-
     const handleSaveClick = () => {
-        dispatch(saveCompany(currentCompany));
+        if (currentCompany) {
+            dispatch(saveCompany(currentCompany));
+        }
+        if(unsavedCompanies.length == 2){
+            setCurrentCompanyIndex(0);
+        }
     };
 
     const containerStyle = {
@@ -64,6 +62,16 @@ function ExplorePage() {
         </div>;
     }
 
+    if (!currentCompany) {
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '12rem' }}>
+            <p className="text">
+              There are no more startups that you haven't already liked.
+            </p>
+          </div>
+        );
+      }
+
     return (
         <div className="explore-container">
             <CardComponent company={currentCompany}/>
@@ -71,7 +79,7 @@ function ExplorePage() {
                 <button className="remove-button" onClick={showNextCompany}>
                     <RxCross2 color="black" size={30}/>
                 </button>
-                <button className="save-button" onClick={() => { showNextCompany(); handleSaveClick(); }}>
+                <button className="save-button" onClick={() => {  handleSaveClick(); }}>
                     <AiOutlineHeart color="#58A894" size={30}/>
                 </button>
             </div>
