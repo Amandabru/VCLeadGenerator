@@ -6,12 +6,16 @@ import Typography from '@mui/joy/Typography';
 import './CardComponent.css';
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlinePlace } from 'react-icons/md';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
 function CardComponent({company})  {
 
     const [isClicked, setIsClicked] = useState(false);
+
+    useEffect(() => {
+      setIsClicked(false);
+    }, [company]);
 
     const handleNameClick = () => {
       setIsClicked(true);
