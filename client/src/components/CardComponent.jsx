@@ -9,10 +9,16 @@ import { MdOutlinePlace } from 'react-icons/md';
 import { useState, useEffect} from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import profile from '../assets/profile.png';
+import {AiTwotoneHeart} from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { unsaveCompany } from '../redux/features/savedCompaniesSlice.js';
+import { useNavigate } from 'react-router-dom';
 
-function CardComponent({company})  {
+function CardComponent({company, isLiked})  {
 
     const [isClicked, setIsClicked] = useState(false);
+    const dispatch = useDispatch();
+    const navigateTo = useNavigate();
 
     useEffect(() => {
       setIsClicked(false);
@@ -24,6 +30,11 @@ function CardComponent({company})  {
 
     const handleBackClick = () => {
       setIsClicked(false);
+    };
+
+    const handleUnsaveClick = () => {
+      dispatch(unsaveCompany(company));
+      navigateTo('/saved');  
     };
 
     return (
@@ -52,9 +63,12 @@ function CardComponent({company})  {
         >
         {!isClicked && (
             <div>
+              <div style={{display: 'flex', flexDirection: 'row',  alignItems: 'baseline', justifyContent: 'space-between' }}>
                 <Typography fontFamily="'Poppins', sans-serif" fontSize="xl4" fontWeight="xl" textColor="#fff">
                     {company.name}
                 </Typography>
+                {isLiked ? <AiTwotoneHeart className='heart' size={30} color="#58A894" onClick={handleUnsaveClick} /> : null}
+              </div>
                 <AspectRatio sx={{ mt: 1 }} ratio="19/8" objectFit="contain" variant="plain">
                     <img
                     alt=""

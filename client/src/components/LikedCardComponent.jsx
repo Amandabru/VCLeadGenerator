@@ -8,7 +8,8 @@ function LikedCard({company}) {
     const dispatch = useDispatch();
     const navigateTo = useNavigate();
 
-    const handleUnsaveClick = () => {
+    const handleUnsaveClick = (event) => {
+        event.stopPropagation();
         dispatch(unsaveCompany(company));
     };
 
@@ -23,7 +24,7 @@ function LikedCard({company}) {
                     <h1 className='company-name'>
                         {company.name}
                     </h1>
-                    <AiTwotoneHeart size={30} color="#58A894" onClick={handleUnsaveClick}/>
+                    <AiTwotoneHeart className="heart" size={30} color="#58A894" onClick={handleUnsaveClick}/>
                 </div>
                 <p>
                     Nr of employees: {company.size}

@@ -104,3 +104,12 @@ ul li a:hover{
 .linkedIn:hover {
     color: #58A894 !important;
 }
+
+.heart{
+    cursor: pointer;
+}
+
+.heart:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+}

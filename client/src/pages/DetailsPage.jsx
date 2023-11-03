@@ -22,7 +22,7 @@ function DetailsPage() {
     return (
         <div className="outer-container">
             <RxCross2 color="black" size={30} className="cross" onClick={redirect}/>
-            <CardComponent company={savedCompany}/>
+            <CardComponent company={savedCompany} isLiked={true}/>
         </div>
     );
 }

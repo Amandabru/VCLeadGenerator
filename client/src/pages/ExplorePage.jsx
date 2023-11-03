@@ -103,7 +103,7 @@ function ExplorePage() {
 
     return (
         <div className="explore-container">
-            <CardComponent company={currentCompany}/>
+            <CardComponent company={currentCompany} isLiked={false}/>
             <div className="button-container">
                 <button className="remove-button" onClick={showNextCompany}>
                     <RxCross2 color="black" size={30}/>
