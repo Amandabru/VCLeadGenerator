@@ -8,6 +8,7 @@ import { CgProfile } from 'react-icons/cg';
 import { MdOutlinePlace } from 'react-icons/md';
 import { useState, useEffect} from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
+import profile from '../assets/profile.png';
 
 function CardComponent({company})  {
 
@@ -88,16 +89,21 @@ function CardComponent({company})  {
           {isClicked && (
             <div style={{ zIndex: 999 }}>
               <IoChevronBackOutline color="#fff" onClick={handleBackClick} style={{cursor:'pointer'}}/>
-              <AspectRatio sx={{ mt: 4 }} ratio="19/8" objectFit="contain" variant="plain">
+              <AspectRatio  sx={{ mt: 4 }} ratio="19/8" objectFit="contain" variant="plain">
                   <img
                   alt=""
-                  src="https://static.vecteezy.com/system/resources/previews/006/409/485/original/people-thinking-to-make-decision-problem-solving-and-find-creative-ideas-with-question-mark-in-flat-cartoon-background-for-poster-illustration-vector.jpg"
+                  src={profile}
                   />
               </AspectRatio>
               <div className="divider" style={{ display: 'flex', marginTop: '2rem', marginLeft:'4rem', flexDirection: 'column'}}>
-                <Typography fontFamily="'Poppins', sans-serif" fontSize="xl2" textColor="#fff" >
-                    Bo Tunnquist
-                </Typography>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: '1rem'}}>
+                  <Typography fontFamily="'Poppins', sans-serif" fontSize="xl2" textColor="#fff" >
+                      Bo Tunnquist
+                  </Typography>
+                  <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" >
+                    <a href="" className='linkedIn' rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>LinkedIn</a>
+                  </Typography>
+                </div>
                 <Typography sx={{ marginBottom:'1rem'}} fontSize="0.8rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
                   50 years old
                 </Typography>
