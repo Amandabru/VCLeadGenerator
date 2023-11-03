@@ -6,7 +6,7 @@ function NavBar() {
  
     return (
        <nav>
-          <Link to="/" className="title">InvesTinder</Link>
+          <Link to="/" className="title">SeedScout</Link>
         <ul>
             <li>
                 <Link to="/explore" className="test">Explore</Link>

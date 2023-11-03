@@ -2,16 +2,22 @@ import './LikedCardComponent.css';
 import {AiTwotoneHeart} from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { unsaveCompany } from '../redux/features/savedCompaniesSlice.js';
+import { useNavigate } from 'react-router-dom';
 
 function LikedCard({company}) {
     const dispatch = useDispatch();
+    const navigateTo = useNavigate();
 
     const handleUnsaveClick = () => {
         dispatch(unsaveCompany(company));
     };
 
+    const showLikedCard = () => {
+        navigateTo(`/details/${company.name}`);
+    };
+
     return (
-        <div className='outer-div'>
+        <div className='outer-div' onClick={showLikedCard}>
             <div className='liked-card-container'>
                 <div className='header'>
                     <h1 className='company-name'>

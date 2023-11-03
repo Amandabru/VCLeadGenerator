@@ -6,6 +6,7 @@ import StartPage from './pages/StartPage';
 import ProfilePage from './pages/ProfilePage';
 import LikedPage from './pages/LikedPage';
 import ExplorePage from './pages/ExplorePage';
+import DetailsPage from './pages/DetailsPage';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/saved" element={<LikedPage/>} />
         <Route path="/explore" element={<ExplorePage/>} />
+        <Route path="/details/:companyName" element={<DetailsPage/>} />
       </Routes>
       </div>
     </>

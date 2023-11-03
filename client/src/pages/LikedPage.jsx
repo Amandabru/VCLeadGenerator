@@ -11,7 +11,7 @@ function SavedPage() {
             {savedCompanies.length > 0 ? (
             <div>
                 {savedCompanies.map((company) => (
-                    <LikedCard key={company.name} company={company} />
+                    <LikedCard key={company.name} company={company}/>
                 ))}
             </div>
             ) : (
