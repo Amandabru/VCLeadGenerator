@@ -1,23 +1,20 @@
-import { Link } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import './NavBar.css';
-import {IoSettingsOutline} from 'react-icons/io5';
 
 function NavBar() {
  
     return (
        <nav>
-          <Link to="/" className="title">SeedScout</Link>
+          <NavLink to="/" className="title" style={({ isActive }) => ({ color: isActive ? '#58A894' : 'black' })}>SeedScout</NavLink>
         <ul>
             <li>
-                <Link to="/explore" className="test">Explore</Link>
+                <NavLink to="/explore" style={({ isActive }) => ({ color: isActive ? '#58A894' : 'black' })}>Explore</NavLink>
             </li>
             <li>
-                <Link to="/saved">Liked</Link>
+                <NavLink to="/saved" style={({ isActive }) => ({ color: isActive ? '#58A894' : 'black' })}>Liked</NavLink>
             </li>
-            <li className="settings">
-                <Link to="/profile">
-                    <IoSettingsOutline size={22}/>
-                </Link>
+            <li>
+                <NavLink to="/about" style={({ isActive }) => ({ color: isActive ? '#58A894' : 'black' })}>About</NavLink>
             </li>
         </ul>
        </nav>

@@ -1,0 +1,47 @@
+.title{
+    font-size: 2.5rem;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    margin-top: -1rem;
+}
+
+.outer-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.member-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 3rem;
+}
+
+img{
+    border-radius: 0.5rem;
+    width: 200px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.248);
+}
+
+.member{
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.name{
+    font-family: 'Poppins', sans-serif;
+    color: black;
+}
+
+.description{
+    font-size: 1rem !important;
+    color: black;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
