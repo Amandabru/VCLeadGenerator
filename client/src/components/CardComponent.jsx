@@ -38,7 +38,6 @@ function CardComponent({company})  {
           width: 800,
           height: 500,
           overflow: 'auto',
-          
         }}
       >
         <CardOverflow
@@ -145,6 +144,8 @@ function CardComponent({company})  {
                 <li><CgProfile/><a href="#1" onClick={handleNameClick}> Kalle Karlsson</a></li>
             </ul>
             </Typography>
+            <Typography textColor="#fff" sx={{ mt: 1 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-md">About</Typography>
+            <Typography textColor="#fff" sx={{ mt: 0.5 }} fontFamily="'Poppins', sans-serif" fontSize="0.77rem">{company.founders}</Typography>
           </CardContent>
 
         </CardContent>
