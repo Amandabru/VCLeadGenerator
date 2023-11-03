@@ -1,10 +1,10 @@
 import './LikedCardComponent.css';
-import {AiTwotoneHeart} from 'react-icons/ai';
+import { AiTwotoneHeart } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { unsaveCompany } from '../redux/features/savedCompaniesSlice.js';
 import { useNavigate } from 'react-router-dom';
 
-function LikedCard({company}) {
+function LikedCard({ company }) {
     const dispatch = useDispatch();
     const navigateTo = useNavigate();
 
@@ -24,7 +24,7 @@ function LikedCard({company}) {
                     <h1 className='company-name'>
                         {company.name}
                     </h1>
-                    <AiTwotoneHeart className="heart" size={30} color="#58A894" onClick={handleUnsaveClick}/>
+                    <AiTwotoneHeart className="heart" size={30} color="#58A894" onClick={handleUnsaveClick} />
                 </div>
                 <p>
                     Nr of employees: {company.size}
@@ -33,8 +33,12 @@ function LikedCard({company}) {
                     Founded in 2022
                 </p>
                 <p>
-                    Company LinkedIn
+                    <a className='website' href={"https://www.linkedin.com/company/" + company.id} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s' }}>
+                        Company LinkedIn
+                    </a>
                 </p>
+
+
             </div>
         </div>
     );

@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 function CardComponent({company, isLiked})  {
 
     const [isClicked, setIsClicked] = useState(false);
+    const [selectedName, setSelectedName] = useState('');
     const dispatch = useDispatch();
     const navigateTo = useNavigate();
 
@@ -24,7 +25,8 @@ function CardComponent({company, isLiked})  {
       setIsClicked(false);
     }, [company]);
 
-    const handleNameClick = () => {
+    const handleNameClick = (name) => {
+      setSelectedName(name);
       setIsClicked(true);
     };
 
@@ -89,7 +91,7 @@ function CardComponent({company, isLiked})  {
                     </div>
                 </div>
                 <Typography fontSize="0.77rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
-                    {company.description}
+                    {company.business}
                 </Typography>
                 <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 3 }}>
                     <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
@@ -111,7 +113,7 @@ function CardComponent({company, isLiked})  {
               <div className="divider" style={{ display: 'flex', marginTop: '2rem', marginLeft:'4rem', flexDirection: 'column'}}>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: '1rem'}}>
                   <Typography fontFamily="'Poppins', sans-serif" fontSize="xl2" textColor="#fff" >
-                      Bo Tunnquist
+                      {selectedName}
                   </Typography>
                   <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" >
                     <a href="" className='linkedIn' rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>LinkedIn</a>
@@ -152,10 +154,11 @@ function CardComponent({company, isLiked})  {
             <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  - {company.size}</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
-                <li> <CgProfile/><a href="#1" onClick={handleNameClick}> Bo Tunnquist</a></li>
-                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Janne Jansson</a></li>
-                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Sofia Andersson</a></li>
-                <li><CgProfile/><a href="#1" onClick={handleNameClick}> Kalle Karlsson</a></li>
+                {company.employees.map((employee) => (
+                    <li key={employee}><CgProfile/><a href="#1" onClick={() => {
+                      handleNameClick(employee);
+                    }}> {employee}</a></li>
+                ))}
             </ul>
             </Typography>
             <Typography textColor="#fff" sx={{ mt: 1 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-md">About</Typography>
