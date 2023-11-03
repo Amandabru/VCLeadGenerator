@@ -7,7 +7,7 @@ function SavedPage() {
     const savedCompanies = useSelector((state) => state.savedCompanies);
 
     return (
-        <div>
+        <div className="outer-div">
             {savedCompanies.length > 0 ? (
             <div>
                 {savedCompanies.map((company) => (
