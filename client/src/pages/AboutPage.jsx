@@ -1,6 +1,9 @@
 import './AboutPage.css';
 import team from '../assets/team.jpg';
 import {BsLinkedin} from 'react-icons/bs';
+import Hanna from '../assets/Hanna.jpg';
+import Alex from '../assets/Alex.png';
+import Amanda from '../assets/amanda.jpg';
 
 function AboutPage() {
     return (
@@ -14,32 +17,35 @@ function AboutPage() {
                     <p className='name'>
                         Elias Lundgren
                     </p>
-                    <BsLinkedin color="#235347" size={25}/>
+                    <a href="https://www.linkedin.com/in/amanda-brundin/" target='_blank' rel="noreferrer">
+                        <BsLinkedin className="icon" color="#235347" size={25}/>
+                    </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj ndkjewnk wekjnewk wkednwjk ejf 
-                        efwe wcw ecwec wccw wecewfw wewec wcw wcwecw wewfewc 
+                        Lorem ipsum ejfnewjk wekjnewkj  
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={team}/>
+                    <img src={Hanna} width="500" height="200"/>
                     <p className='name'>
                         Hanna Almqvist
                     </p>
-                    <BsLinkedin color="#235347" size={25}/>
+                    <a href="https://www.linkedin.com/in/hanna-almqvist/" target='_blank' rel="noreferrer">
+                        <BsLinkedin className="icon" color="#235347" size={25}/>
+                    </a>
                     <p className='description'>
-                    Lorem ipsum ejfnewjk wekjnewkj ndkjewnk wekjnewk wkednwjk ejf 
-                        efwe wcw ecwec wccw wecewfw wewec wcw wcwecw wewfewc 
+                        User Research, User Experience Design
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={team}/>
+                    <img src={Alex} width="500" height="200"/>
                     <p className='name'>
                         Alexander Olsson
                     </p>
-                    <BsLinkedin color="#235347" size={25}/>
+                    <a href="https://www.linkedin.com/in/olsson-alex/" target='_blank' rel="noreferrer">
+                        <BsLinkedin className="icon" color="#235347" size={25}/>
+                    </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj ndkjewnk wekjnewk wkednwjk ejf 
-                        efwe wcw ecwec wccw wecewfw wewec wcw wcwecw wewfewc 
+                        Market research, Analyzed interviews
                     </p>
                 </div>
                 <div className='member'>
@@ -47,21 +53,23 @@ function AboutPage() {
                     <p className='name'>
                         Sally Isakas
                     </p>
-                    <BsLinkedin color="#235347" size={25}/>
+                    <a href="https://www.linkedin.com/in/amanda-brundin/" target='_blank' rel="noreferrer">
+                        <BsLinkedin className="icon" color="#235347" size={25}/>
+                    </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj ndkjewnk wekjnewk wkednwjk ejf 
-                        efwe wcw ecwec wccw wecewfw wewec wcw wcwecw wewfewc 
+                        Lorem ipsum ejfnewjk wekjnewkj
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={team}/>
+                    <img src={Amanda} width="500" height="200"/>
                     <p className='name'>
                         Amanda Brundin
                     </p>
-                    <BsLinkedin color="#235347" size={25}/>
+                    <a href="https://www.linkedin.com/in/amanda-brundin/" target='_blank' rel="noreferrer">
+                        <BsLinkedin className="icon" color="#235347" size={25}/>
+                    </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj ndkjewnk wekjnewk wkednwjk ejf 
-                        efwe wcw ecwec wccw wecewfw wewec wcw wcwecw wewfewc 
+                        Design, Frontend Development
                     </p>
                 </div>
             </div>
