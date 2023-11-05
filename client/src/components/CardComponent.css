@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 
 .left-side {
-    height: 72vh !important;
+    height: 75vh !important;
     background-color: #235347 !important;
     transition: background-color 1s;
 }

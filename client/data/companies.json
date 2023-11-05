@@ -10,7 +10,9 @@
         "website": "https://www.sniph.com",
         "employees": ["Lisa Kjellqvist", "Tara Derakshan"],
         "linkedIn": "https://www.linkedin.com/company/sniph/",
-        "image": "../assets/sniph.png"
+        "image": "/public/sniph.png",
+        "location": "Stockholm",
+        "founded": "2015"
     },
     {
         "id": "pliance",
@@ -23,7 +25,9 @@
         "website": "https://pliance.io",
         "employees": ["Siam Choudhury", "Tomas Einarsson"],
         "linkedIn": "https://www.linkedin.com/company/pliance/",
-        "image": "../assets/pliance.jpeg"
+        "image": "/public/pliance.jpeg",
+        "location": "Stockholm",
+        "founded": "2018"
     },
     {
         "id": "sosafe-official",
@@ -36,7 +40,9 @@
         "website": "https://sosafe.se",
         "employees": [],
         "linkedIn": "https://www.linkedin.com/company/sosafe-official/",
-        "image": "../assets/sosafe.png"
+        "image": "/public/sosafe.png",
+        "location": "Stockholm",
+        "founded": "2020"
     },
     {
         "id": "karmalicious",
@@ -49,7 +55,9 @@
         "website": "https://www.karma.life",
         "employees": ["Lars Lindgren", "Daniel Lauren", "Mattias Miksche"],
         "linkedIn": "https://www.linkedin.com/company/karmalicious/",
-        "image": "../assets/karma.svg"
+        "image": "/public/karma.svg",
+        "location": "Stockholm",
+        "founded": "2016"
     },
     {
         "id": "emsense",
@@ -62,20 +70,9 @@
         "website": "https://www.emsensetech.com",
         "employees": ["Rickard Wahlström"],
         "linkedIn": "https://www.linkedin.com/company/emsense/",
-        "image": "../assets/emsense.jpeg"
-    },
-    {
-        "id": "tomta-ai",
-        "name": "tomtA.ai",
-        "industry": "Software Development",
-        "size": 9,
-        "description": "tomtA.ai turns sensitive data into its precise and safe statistical twin to create impactful AI. Preserve all true relationships in your original data while no longer being subject to privacy laws such as GDPR. Receive our class leading accuracy, utility, F1 and privacy metrics for every transformation of sensitive data without the likelihood of re-identifying any individual.\n\ntomtA.ai trusted next generation privacy enhanced technology uses computational differential privacy and AI to deploy locally run filters to transform sensitive data into its precise statistical equivalent to ensure safe use. This relationship between real data and the transformed data in a safe and usable format is not possible with current privacy solutions that rely upon synthetic data, classical differential privacy or homomorphic encryption.",
-        "business": "tomtA.ai is a software development company specializing in atomic data anonymization, transforming sensitive data into a safe, precise, and shareable asset. Their technology, using computational differential privacy and AI, enables on-premise deployment and preserves real data value into a safe and precise equivalent. This approach ensures compliance with data privacy laws like GDPR and HIPAA. tomtA.ai's services are applicable across various industries, including life sciences, fintech, energy distribution, manufacturing, transportation, and logistics. They aim to empower innovators with the data they need to make a difference and create impactful AI.",
-        "founders": "tomtA.ai is led by CEO and Co-founder Steven Atneosen, who has a background in corporate development and entrepreneurship, with experience as an advisor at Electricfish and NIO. The CTO and Co-founder is Saibal Banerjee, Ph.D., who has a strong background in machine learning and computer vision, having served as a Principal Research Scientist at KLA Corp and CEO & Co-founder at BCK Networks. Caroline Dahllöf, serving as a Product Advisor, has a rich experience in product management, data science, and analytics, with previous roles at Cisco Meraki and Kespry Inc.",
-        "website": "https://tomta.ai",
-        "employees": ["Steven Atneosen", "Saibal Banerjee", "Caroline Dahllöf"],
-        "linkedIn": "https://www.linkedin.com/company/tomta-ai/",
-        "image": "../assets/tomta_ai.jpeg"
+        "image": "/public/emsense.jpeg",
+        "location": "Trollhättan",
+        "founded": "2020"
     },
     {
         "id": "stabelo",
@@ -88,6 +85,8 @@
         "website": "https://www.stabelo.se",
         "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"],
         "linkedIn": "https://www.linkedin.com/company/stabelo/",
-        "image": "../assets/stabelo.png"
+        "image": "/public/stabelo.png",
+        "location": "Stockholm",
+        "founded": "2017"
     }
 ]
