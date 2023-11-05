@@ -93,11 +93,18 @@ function CardComponent({company, isLiked})  {
                 <Typography fontSize="0.77rem" fontFamily="'Poppins', sans-serif" textColor="#fff" sx={{ mt: 2}}>
                     {company.business}
                 </Typography>
-                <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 3 }}>
-                    <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
-                        Link to Website
-                    </a>
-                </Typography>
+                <div style={{display: 'flex', flexDirection: 'row', gap: '2rem' }}>
+                  <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 2 }}>
+                      <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
+                          Website
+                      </a>
+                  </Typography>
+                  <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 2 }}>
+                      <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
+                          LinkedIn
+                      </a>
+                  </Typography>
+                </div>
             </div>
             )}
 

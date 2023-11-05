@@ -4,11 +4,13 @@
         "name": "Sniph",
         "industry": "Retail Luxury Goods and Jewelry",
         "size": 13,
-        "description": "Sniph is your number one discovery service for scent with exquisite perfumes from the very best niche perfume brands. As scent experts, weâ€™re privileged to handpick the very best scents for our customers. We want to honor the individual preferences of each of our customers through personal recommendations and a flexible scent journey. Even if the expectations are already high, we never settle for anything less than a personal pick for your specific nose.",
+        "description": "Sniph is your number one discovery service for scent with exquisite perfumes from the very best niche perfume brands. As scent experts, we're privileged to handpick the very best scents for our customers. We want to honor the individual preferences of each of our customers through personal recommendations and a flexible scent journey. Even if the expectations are already high, we never settle for anything less than a personal pick for your specific nose.",
         "business": "Sniph is a subscription-based service that offers a curated selection of niche perfumes. They provide personalized recommendations and solutions through various channels, including phone, email, chat, and in-person visits to their fragrance bar in Stockholm. They also offer gift sets, an advent calendar, and a fragrance guide to help customers find their perfect scent. Sniph donates 10% of profits from full-size perfume sales in October to the Cancer Foundation.",
         "founders": "Sniph was founded in 2016 by Lisa Kjellqvist and Tara Derakshan. However, there is no available information about their previous experience.",
         "website": "https://www.sniph.com",
-        "employees": ["Lisa Kjellqvist", "Tara Derakshan"]
+        "employees": ["Lisa Kjellqvist", "Tara Derakshan"],
+        "linkedIn": "https://www.linkedin.com/company/sniph/",
+        "image": "../assets/sniph.png"
     },
     {
         "id": "pliance",
@@ -19,7 +21,9 @@
         "business": "Pliance is a company that offers anti-money laundering (AML) and regulatory compliance solutions. They provide products such as AML screening and monitoring, as well as transaction behavior monitoring. The company also offers data that can be screened and monitored through their APIs. Pliance focuses on providing relevant and regularly updated information on persons globally and companies in the Nordics. They emphasize the importance of cutting off the flow of illegal funds to combat organized crime, political corruption, terrorist financing, and human trafficking. Pliance has been acquired by Verified and has received a €31 million investment from Verdane. They offer transparent pricing options and provide support for integration.",
         "founders": "Pliance was founded by Siam Choudhury and Tomas Einarsson. Siam Choudhury is the Co-Founder and CEO of the company. He has previous experience as a Product Manager at Acast AB and Head of Product at FundedByMe. Tomas Einarsson is a Co-Founder of Pliance. He has experience as a Consultant at Savelend Sweden AB and Active Solution.",
         "website": "https://pliance.io",
-        "employees": ["Siam Choudhury", "Tomas Einarsson"]
+        "employees": ["Siam Choudhury", "Tomas Einarsson"],
+        "linkedIn": "https://www.linkedin.com/company/pliance/",
+        "image": "../assets/pliance.jpeg"
     },
     {
         "id": "sosafe-official",
@@ -30,7 +34,9 @@
         "business": "SoSafe International AB is a company that is revolutionizing personal safety with their groundbreaking technology and human-centered design. Their product, SoSafe, allows users to easily and securely review, share, and delete their data. The technology also includes features such as saving all events for evidence or analysis, real-time audio sharing with emergency contacts and a central monitoring station, and real-time location sharing. SoSafe aims to redefine what it means to feel safe and offers assistance at the touch of a button. The company offers a free 30-day trial of their app.",
         "founders": "",
         "website": "https://sosafe.se",
-        "employees": []
+        "employees": [],
+        "linkedIn": "https://www.linkedin.com/company/sosafe-official/",
+        "image": "../assets/sosafe.png"
     },
     {
         "id": "karmalicious",
@@ -41,7 +47,9 @@
         "business": "Karma is an IT company offering a mobile ordering and payment solution for restaurants, aiming to increase revenue, customer relationships, and reduce food waste. Their platform, Karma Pay, allows customers to order and pay for meals using mobile phones. The company also gathers guest data to help restaurants build stronger relationships and attract repeat customers. Karma claims that restaurants using their platform can serve 30% more customers per day with the same staff, increase average order value by 20%, and increase tips to staff by 50%.",
         "founders": "Karma's team includes Lars Lindgren, an investor with experience in multiple companies like iboost-life, sigrid-therapeutics-ab, habeno, askfill, and inex-one. Another significant team member is Daniel Lauren, the founder and CEO of Firewatch Ventures, and co-founder of Short Circuit Studios, Prosper Football, and Aldeon AB. Mattias Miksche, an investor and chairman at habeno, and board member at oceansapart and hem-com, is also part of the team.",
         "website": "https://www.karma.life",
-        "employees": ["Lars Lindgren", "Daniel Lauren", "Mattias Miksche"]
+        "employees": ["Lars Lindgren", "Daniel Lauren", "Mattias Miksche"],
+        "linkedIn": "https://www.linkedin.com/company/karmalicious/",
+        "image": "../assets/karma.svg"
     },
     {
         "id": "emsense",
@@ -52,28 +60,34 @@
         "business": "Emsense Technologies, based in Gothenburg, Sweden, develops innovative radar solutions for automotive health monitoring. The company's technology aims to provide quick, appropriate medical care in the event of traffic accidents. Emsense has experience in the automotive and medtech industries and is a member of the Plug and Play Tech Center ecosystem. The company has received work orders from global automotive suppliers and has recently established a subsidiary in Italy. Emsense is also involved in various collaborations and has been granted funding for a feasibility study on post-crash monitoring.",
         "founders": "Emsense Technologies is led by CEO and Co-Founder, Rickard Wahlström. Wahlström has a background in electrical and electronics engineering and has previously worked as a hardware engineer for companies like Denso and CEVT, and as a requirements engineer at Volvo Bus Corporation. He also has experience as a consultant at Devport AB.",
         "website": "https://www.emsensetech.com",
-        "employees": ["Rickard Wahlström"]
+        "employees": ["Rickard Wahlström"],
+        "linkedIn": "https://www.linkedin.com/company/emsense/",
+        "image": "../assets/emsense.jpeg"
     },
     {
         "id": "tomta-ai",
         "name": "tomtA.ai",
         "industry": "Software Development",
         "size": 9,
-        "description": "tomtAâ„¢ turns sensitive data into its precise and safe statistical twin to create impactful AI. Preserve all true relationships in your original data while no longer being subject to privacy laws such as GDPR. Receive our class leading accuracy, utility, F1 and privacy metrics for every transformation of sensitive data without the likelihood of re-identifying any individual.\n\ntomtAâ„¢ trusted next generation privacy enhanced technology uses computational differential privacy and AI to deploy locally run â€œfiltersâ€ to transform sensitive data into its precise statistical equivalent to ensure safe use. This relationship between real data and the transformed data in a safe and usable format is not possible with current privacy solutions that rely upon synthetic data, classical differential privacy or homomorphic encryption.",
+        "description": "tomtA.ai turns sensitive data into its precise and safe statistical twin to create impactful AI. Preserve all true relationships in your original data while no longer being subject to privacy laws such as GDPR. Receive our class leading accuracy, utility, F1 and privacy metrics for every transformation of sensitive data without the likelihood of re-identifying any individual.\n\ntomtA.ai trusted next generation privacy enhanced technology uses computational differential privacy and AI to deploy locally run filters to transform sensitive data into its precise statistical equivalent to ensure safe use. This relationship between real data and the transformed data in a safe and usable format is not possible with current privacy solutions that rely upon synthetic data, classical differential privacy or homomorphic encryption.",
         "business": "tomtA.ai is a software development company specializing in atomic data anonymization, transforming sensitive data into a safe, precise, and shareable asset. Their technology, using computational differential privacy and AI, enables on-premise deployment and preserves real data value into a safe and precise equivalent. This approach ensures compliance with data privacy laws like GDPR and HIPAA. tomtA.ai's services are applicable across various industries, including life sciences, fintech, energy distribution, manufacturing, transportation, and logistics. They aim to empower innovators with the data they need to make a difference and create impactful AI.",
         "founders": "tomtA.ai is led by CEO and Co-founder Steven Atneosen, who has a background in corporate development and entrepreneurship, with experience as an advisor at Electricfish and NIO. The CTO and Co-founder is Saibal Banerjee, Ph.D., who has a strong background in machine learning and computer vision, having served as a Principal Research Scientist at KLA Corp and CEO & Co-founder at BCK Networks. Caroline Dahllöf, serving as a Product Advisor, has a rich experience in product management, data science, and analytics, with previous roles at Cisco Meraki and Kespry Inc.",
         "website": "https://tomta.ai",
-        "employees": ["Steven Atneosen", "Saibal Banerjee", "Caroline Dahllöf"]
+        "employees": ["Steven Atneosen", "Saibal Banerjee", "Caroline Dahllöf"],
+        "linkedIn": "https://www.linkedin.com/company/tomta-ai/",
+        "image": "../assets/tomta_ai.jpeg"
     },
     {
         "id": "stabelo",
         "name": "Stabelo",
         "industry": "Financial Services",
         "size": 38,
-        "description": "GlÃ¶m personliga rabatter, plÃ¶tsliga rÃ¤ntehÃ¶jningar och sega samtal med banken. Vi ger alla vÃ¥ra kunder lika lÃ¥g rÃ¤nta, Ã¥r efter Ã¥r. Enkelt, transparent, fÃ¤rdigprutat.\n\n---------\n\nStabelo is a Swedish based fintech company focusing on digitalising the mortgage lending segment.",
+        "description": "Glöm personliga rabatter, plötsliga räntehöjningar och sega samtal med banken. Vi ger alla våra kunder lika låg ränta, år efter år. Enkelt, transparent, färdigprutat.\n\n---------\n\nStabelo is a Swedish based fintech company focusing on digitalising the mortgage lending segment.",
         "business": "Stabelo is a Swedish fintech company founded in 2016, specializing in providing digital mortgage services. They offer low-interest rates, a simple digital process, and a fast customer service response time. Stabelo is backed by some of Sweden's largest pension companies and collaborates with BudID for secure bidding and financing. They also have partnerships with Avanza and other financial institutions. The company has already served 25,000 customers and is recognized as \"Årets Bolån\" (Mortgage of the Year) by Privata Affärer. Stabelo operates under the supervision of the Swedish Financial Supervisory Authority.",
         "founders": "Stabelo was founded by Michael Ingelög, Wilhelm Moberg, and Hampus Brodén. Hampus Brodén, the current CEO, has previously worked as the Head of Group Financial Management at SEB and has experience in equity research at both SEB and Pareto Securities AS.",
         "website": "https://www.stabelo.se",
-        "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"]
+        "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"],
+        "linkedIn": "https://www.linkedin.com/company/stabelo/",
+        "image": "../assets/stabelo.png"
     }
 ]

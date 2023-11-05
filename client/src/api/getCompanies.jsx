@@ -14,7 +14,7 @@ async function getCompanies(amount) {
   // }
   
   // mock data
-  return companyData.slice(0, amount);;
+  return companyData.slice(0, amount);
 }
 
 export default getCompanies;
