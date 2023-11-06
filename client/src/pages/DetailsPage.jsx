@@ -7,8 +7,8 @@ import './DetailsPage.css';
 import { useNavigate } from 'react-router-dom';
 
 function DetailsPage() {
-    const { companyName } = useParams();
-    const savedCompany = useSelector((state) => getSavedCompanyByName(state, companyName));
+    const { companyId } = useParams();
+    const savedCompany = useSelector((state) => getSavedCompanyByName(state, companyId));
     const navigateTo = useNavigate();
 
     const redirect = () => {

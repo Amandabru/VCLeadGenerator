@@ -14,7 +14,7 @@ function StartPage() {
                     all backed by a mix of company data and personal insights.
                 </p>
                 <p>
-                    InvesTinder empowers you to discover your perfect investment match effortlessly. 
+                    SeedScout empowers you to discover your perfect investment match effortlessly. 
                     We've revolutionised the way VC firms and startups connect, creating an experience that's as fun as it is rewarding.
                     It's not just about swiping; it's about shaping the future of business.
                 </p>

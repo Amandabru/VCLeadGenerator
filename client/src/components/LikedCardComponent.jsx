@@ -14,7 +14,7 @@ function LikedCard({ company }) {
     };
 
     const showLikedCard = () => {
-        navigateTo(`/details/${company.name}`);
+        navigateTo(`/details/${company.id}`);
     };
 
     return (

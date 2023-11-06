@@ -4,6 +4,8 @@ import {BsLinkedin} from 'react-icons/bs';
 import Hanna from '../assets/Hanna.jpg';
 import Alex from '../assets/Alex.png';
 import Amanda from '../assets/amanda.jpg';
+import Elias from '../assets/Elias.png';
+import Sally from '../assets/Sally.jpg';
 
 function AboutPage() {
     return (
@@ -13,19 +15,19 @@ function AboutPage() {
             </h1>
             <div className='member-container'>
                 <div className='member'>
-                    <img src={team}/>
+                    <img src={Elias} />
                     <p className='name'>
                         Elias Lundgren
                     </p>
-                    <a href="https://www.linkedin.com/in/amanda-brundin/" target='_blank' rel="noreferrer">
+                    <a href="https://www.linkedin.com/in/elias-lundgren/" target='_blank' rel="noreferrer">
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj  
+                        Data Gathering and Processing, Back-end 
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={Hanna} width="500" height="200"/>
+                    <img src={Hanna} />
                     <p className='name'>
                         Hanna Almqvist
                     </p>
@@ -33,11 +35,11 @@ function AboutPage() {
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        User Research, User Experience Design
+                        User Research, User Experience Design, User Testing
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={Alex} width="500" height="200"/>
+                    <img src={Alex} />
                     <p className='name'>
                         Alexander Olsson
                     </p>
@@ -49,19 +51,19 @@ function AboutPage() {
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={team}/>
+                    <img src={Sally} />
                     <p className='name'>
                         Sally Isakas
                     </p>
-                    <a href="https://www.linkedin.com/in/amanda-brundin/" target='_blank' rel="noreferrer">
+                    <a href="https://www.linkedin.com/in/sally-isakas/" target='_blank' rel="noreferrer">
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        Lorem ipsum ejfnewjk wekjnewkj
+                        Market research, Business Development, Support on Back-end
                     </p>
                 </div>
                 <div className='member'>
-                    <img src={Amanda} width="500" height="200"/>
+                    <img src={Amanda}/>
                     <p className='name'>
                         Amanda Brundin
                     </p>
@@ -69,7 +71,7 @@ function AboutPage() {
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        Design, Frontend Development
+                        User Experience Design, User Testing, Front-end Development
                     </p>
                 </div>
             </div>

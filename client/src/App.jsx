@@ -19,7 +19,7 @@ function App() {
         <Route path="/about" element={<AboutPage/>} />
         <Route path="/saved" element={<LikedPage/>} />
         <Route path="/explore" element={<ExplorePage/>} />
-        <Route path="/details/:companyName" element={<DetailsPage/>} />
+        <Route path="/details/:companyId" element={<DetailsPage/>} />
       </Routes>
       </div>
     </>

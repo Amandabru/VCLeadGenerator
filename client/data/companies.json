@@ -10,7 +10,7 @@
         "website": "https://www.sniph.com",
         "employees": ["Lisa Kjellqvist", "Tara Derakshan"],
         "linkedIn": "https://www.linkedin.com/company/sniph/",
-        "image": "/public/sniph.png",
+        "image": "/sniph.png",
         "location": "Stockholm",
         "founded": "2015"
     },
@@ -25,7 +25,7 @@
         "website": "https://pliance.io",
         "employees": ["Siam Choudhury", "Tomas Einarsson"],
         "linkedIn": "https://www.linkedin.com/company/pliance/",
-        "image": "/public/pliance.jpeg",
+        "image": "/pliance.jpeg",
         "location": "Stockholm",
         "founded": "2018"
     },
@@ -40,7 +40,7 @@
         "website": "https://sosafe.se",
         "employees": [],
         "linkedIn": "https://www.linkedin.com/company/sosafe-official/",
-        "image": "/public/sosafe.png",
+        "image": "/sosafe.png",
         "location": "Stockholm",
         "founded": "2020"
     },
@@ -55,7 +55,7 @@
         "website": "https://www.karma.life",
         "employees": ["Lars Lindgren", "Daniel Lauren", "Mattias Miksche"],
         "linkedIn": "https://www.linkedin.com/company/karmalicious/",
-        "image": "/public/karma.svg",
+        "image": "/karma.svg",
         "location": "Stockholm",
         "founded": "2016"
     },
@@ -70,7 +70,7 @@
         "website": "https://www.emsensetech.com",
         "employees": ["Rickard Wahlström"],
         "linkedIn": "https://www.linkedin.com/company/emsense/",
-        "image": "/public/emsense.jpeg",
+        "image": "/emsense.jpeg",
         "location": "Trollhättan",
         "founded": "2020"
     },
@@ -85,7 +85,7 @@
         "website": "https://www.stabelo.se",
         "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"],
         "linkedIn": "https://www.linkedin.com/company/stabelo/",
-        "image": "/public/stabelo.png",
+        "image": "/stabelo.png",
         "location": "Stockholm",
         "founded": "2017"
     }

@@ -1,3 +1,3 @@
-export const getSavedCompanyByName = (state, companyName) => {
-    return state.savedCompanies.find((company) => company.name === companyName);
+export const getSavedCompanyByName = (state, companyId) => {
+    return state.savedCompanies.find((company) => company.id === companyId);
   };

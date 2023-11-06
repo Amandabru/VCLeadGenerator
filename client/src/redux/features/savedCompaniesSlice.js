@@ -8,7 +8,7 @@ const savedCompaniesSlice = createSlice({
       state.push(action.payload);
     },
     unsaveCompany: (state, action) => {
-        return state.filter((company) => company.name !== action.payload.name);
+        return state.filter((company) => company.id !== action.payload.id);
     },
   },
 });
