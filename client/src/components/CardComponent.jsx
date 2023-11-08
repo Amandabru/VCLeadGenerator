@@ -158,7 +158,7 @@ function CardComponent({company, isLiked})  {
         </CardOverflow>
         <CardContent sx={{ gap: 1.5, minWidth: 200 }}>
           <CardContent>
-            <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Employees  - {company.size}</Typography>
+            <Typography textColor="#fff" sx={{ mt: 7 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-lg">Founders</Typography>
             <Typography fontSize="sm" sx={{ mt: 0.5 }}>
             <ul className="custom-list">
                 {company.employees.map((employee) => (
@@ -168,8 +168,8 @@ function CardComponent({company, isLiked})  {
                 ))}
             </ul>
             </Typography>
-            <Typography textColor="#fff" sx={{ mt: 1 }} fontFamily="'Poppins', sans-serif" className="employees-title" level="title-md">About</Typography>
             <Typography textColor="#fff" sx={{ mt: 0.5 }} fontFamily="'Poppins', sans-serif" fontSize="0.77rem">{company.founders}</Typography>
+            <Typography textColor="#fff" sx={{ mt: 0.5 }} fontFamily="'Poppins', sans-serif" fontSize="0.77rem">Employees - {company.size}</Typography>
           </CardContent>
 
         </CardContent>

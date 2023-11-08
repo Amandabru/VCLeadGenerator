@@ -30,15 +30,20 @@ function LikedCard({ company }) {
                     Nr of employees: {company.size}
                 </p>
                 <p>
-                    Founded in 2022
+                    Founded in {company.founded}
                 </p>
-                <p>
-                    <a className='website' href={"https://www.linkedin.com/company/" + company.id} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s' }}>
-                        Company LinkedIn
-                    </a>
-                </p>
-
-
+                <div style={{display: 'flex', flexDirection: 'row', gap: '1rem', marginTop: '-1rem' }}>
+                    <p>
+                        <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s' }}>
+                            Website
+                        </a>
+                    </p>
+                    <p>
+                        <a className='website' href={"https://www.linkedin.com/company/" + company.id} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s' }}>
+                            LinkedIn
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     );

@@ -1,6 +1,5 @@
 import './AboutPage.css';
-import team from '../assets/team.jpg';
-import {BsLinkedin} from 'react-icons/bs';
+import { BsLinkedin } from 'react-icons/bs';
 import Hanna from '../assets/Hanna.jpg';
 import Alex from '../assets/Alex.png';
 import Amanda from '../assets/amanda.jpg';
@@ -10,6 +9,14 @@ import Sally from '../assets/Sally.jpg';
 function AboutPage() {
     return (
         <div className='outer-container'>
+             <h1 className="title">
+                About
+            </h1>
+            <p className='about'>
+                The project aims to develop a service tailored to the needs of venture capital (VC) firms seeking to efficiently identify promising start-up investment opportunities in the early stages, with a focus on Pre-Seed to Series A companies. 
+                The solution includes an algorithm that utilizes web scraping and ChatGPT to extract data from LinkedIn profiles and company websites.
+                Insight were gained by conducting market analysis and interviews with professionals 
+            </p>
             <h1 className="title">
                 Team
             </h1>
@@ -47,7 +54,7 @@ function AboutPage() {
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        Market research, Analyzed interviews
+                        Market Research, Interview Insights, Process Tracking
                     </p>
                 </div>
                 <div className='member'>
@@ -59,7 +66,7 @@ function AboutPage() {
                         <BsLinkedin className="icon" color="#235347" size={25}/>
                     </a>
                     <p className='description'>
-                        Market research, Business Development, Support on Back-end
+                        Market Research, Business Development, Support on Back-end
                     </p>
                 </div>
                 <div className='member'>

@@ -1,5 +1,20 @@
 [
     {
+        "id": "stabelo",
+        "name": "Stabelo",
+        "industry": "Financial Services",
+        "size": 38,
+        "description": "Glöm personliga rabatter, plötsliga räntehöjningar och sega samtal med banken. Vi ger alla våra kunder lika låg ränta, år efter år. Enkelt, transparent, färdigprutat.\n\n---------\n\nStabelo is a Swedish based fintech company focusing on digitalising the mortgage lending segment.",
+        "business": "Stabelo is a Swedish fintech company founded in 2016, specializing in providing digital mortgage services. They offer low-interest rates, a simple digital process, and a fast customer service response time. Stabelo is backed by some of Sweden's largest pension companies and collaborates with BudID for secure bidding and financing. They also have partnerships with Avanza and other financial institutions. The company has already served 25,000 customers and is recognized as \"Årets Bolån\" (Mortgage of the Year) by Privata Affärer. Stabelo operates under the supervision of the Swedish Financial Supervisory Authority.",
+        "founders": "Stabelo was founded by Michael Ingelög, Wilhelm Moberg, and Hampus Brodén. Hampus Brodén, the current CEO, has previously worked as the Head of Group Financial Management at SEB and has experience in equity research at both SEB and Pareto Securities AS.",
+        "website": "https://www.stabelo.se",
+        "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"],
+        "linkedIn": "https://www.linkedin.com/company/stabelo/",
+        "image": "/stabelo.png",
+        "location": "Stockholm",
+        "founded": "2017"
+    },
+    {
         "id": "sniph",
         "name": "Sniph",
         "industry": "Retail Luxury Goods and Jewelry",
@@ -12,7 +27,7 @@
         "linkedIn": "https://www.linkedin.com/company/sniph/",
         "image": "/sniph.png",
         "location": "Stockholm",
-        "founded": "2015"
+        "founded": "2016"
     },
     {
         "id": "pliance",
@@ -73,20 +88,5 @@
         "image": "/emsense.jpeg",
         "location": "Trollhättan",
         "founded": "2020"
-    },
-    {
-        "id": "stabelo",
-        "name": "Stabelo",
-        "industry": "Financial Services",
-        "size": 38,
-        "description": "Glöm personliga rabatter, plötsliga räntehöjningar och sega samtal med banken. Vi ger alla våra kunder lika låg ränta, år efter år. Enkelt, transparent, färdigprutat.\n\n---------\n\nStabelo is a Swedish based fintech company focusing on digitalising the mortgage lending segment.",
-        "business": "Stabelo is a Swedish fintech company founded in 2016, specializing in providing digital mortgage services. They offer low-interest rates, a simple digital process, and a fast customer service response time. Stabelo is backed by some of Sweden's largest pension companies and collaborates with BudID for secure bidding and financing. They also have partnerships with Avanza and other financial institutions. The company has already served 25,000 customers and is recognized as \"Årets Bolån\" (Mortgage of the Year) by Privata Affärer. Stabelo operates under the supervision of the Swedish Financial Supervisory Authority.",
-        "founders": "Stabelo was founded by Michael Ingelög, Wilhelm Moberg, and Hampus Brodén. Hampus Brodén, the current CEO, has previously worked as the Head of Group Financial Management at SEB and has experience in equity research at both SEB and Pareto Securities AS.",
-        "website": "https://www.stabelo.se",
-        "employees": ["Michael Ingelög", "Wilhelm Moberg", "Hampus Brodén"],
-        "linkedIn": "https://www.linkedin.com/company/stabelo/",
-        "image": "/stabelo.png",
-        "location": "Stockholm",
-        "founded": "2017"
     }
 ]
