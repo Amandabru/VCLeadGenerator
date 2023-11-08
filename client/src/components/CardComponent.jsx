@@ -95,12 +95,12 @@ function CardComponent({company, isLiked})  {
                 </Typography>
                 <div style={{display: 'flex', flexDirection: 'row', gap: '2rem' }}>
                   <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 2 }}>
-                      <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
+                      <a className='website' href={company.website} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'underline', transition: 'color 0.2s'  }}>
                           Website
                       </a>
                   </Typography>
                   <Typography fontFamily="'Poppins', sans-serif" fontSize="0.9rem" textColor="#fff" sx={{ mt: 2 }}>
-                      <a className='website' href={company.linkedIn} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'none', transition: 'color 0.2s'  }}>
+                      <a className='website' href={company.linkedIn} rel="noreferrer" target='_blank' style={{ color: 'white', textDecoration: 'underline', transition: 'color 0.2s'  }}>
                           LinkedIn
                       </a>
                   </Typography>
@@ -149,7 +149,7 @@ function CardComponent({company, isLiked})  {
                   Master of Science in Industrial Economy
                 </Typography>
                 <Typography sx={{ marginBottom:'1rem'}} fontSize="0.7rem" fontFamily="'Poppins', sans-serif" textColor="#fff">
-                  Atlas Copco
+                  KTH
                 </Typography>
               </div>
 
