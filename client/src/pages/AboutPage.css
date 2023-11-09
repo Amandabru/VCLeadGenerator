@@ -2,7 +2,7 @@
     font-size: 2.5rem;
     font-family: 'Poppins', sans-serif;
     color: black;
-    margin-top: -1rem;
+    margin-top: -2rem;
 }
 
 .outer-container{
@@ -67,6 +67,5 @@ img{
     margin-left: 10rem;
     margin-right: 10rem;
     margin-top: 0;
-    margin-bottom: 5rem;
-    text-align: justify;
+    margin-bottom: 3rem;
 }

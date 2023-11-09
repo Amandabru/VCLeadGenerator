@@ -1,5 +1,6 @@
 import './AboutPage.css';
 import { BsLinkedin } from 'react-icons/bs';
+import { FaGithubSquare } from 'react-icons/fa'
 import Hanna from '../assets/Hanna.jpg';
 import Alex from '../assets/Alex.png';
 import Amanda from '../assets/amanda.jpg';
@@ -12,11 +13,36 @@ function AboutPage() {
              <h1 className="title">
                 About
             </h1>
-            <p className='about'>
-                The project aims to develop a service tailored to the needs of venture capital (VC) firms seeking to efficiently identify promising start-up investment opportunities in the early stages, with a focus on Pre-Seed to Series A companies. 
-                The solution includes an algorithm that utilizes web scraping and ChatGPT to extract data from LinkedIn profiles and company websites.
-                Insight were gained by conducting market analysis and interviews with professionals 
-            </p>
+            <div className='about'>
+                <p>
+                    Welcome to SeedScout, where innovation meets efficiency in the world of venture capital. 
+                    Our mission is to revolutionize how VC firms discover and evaluate promising start-ups in the early stages, 
+                    focusing on Pre-Seed to Series A companies.
+                </p>
+                <p>
+                    Sweden's startup game is strong, covering fintech, healthcare, gaming, and more. 
+                    VC firms hustle through events and connections, but the startup world is changing. 
+                    Enter SeedScout, your solution for spotting golden opportunities if you don't have an in-house system.
+                </p>
+                <p>
+                    Deal sourcing is the core of VC life. Everyone's got their methods—some rely on inbound offers, 
+                    others on recommendations and data scraping from platforms. We're here to blend it all, 
+                    delivering a curated list of startups that fit your criteria.
+                </p>
+                <p>
+                    Numbers are crucial, but there's more to it. We call it "soft values"—the secret sauce behind a startup's success. 
+                    SeedScout shines a light on the founder's vibe, leadership style, and industry-changing potential. 
+                    We saw a gap in the market, and we're here to fill it. Think of us as your shortcut to making investment decisions that just feel right.
+                </p>
+                <p>
+                    In a world sticking to the usual playbook, SeedScout is your laid-back sidekick. 
+                    An easy-to-use tool that fits into your workflow without needing a big tech overhaul. 
+                    Our algorithm, with a dash of scraping and ChatGPT magic, gives you the lowdown on startups in a way that feels familiar.
+                </p>
+                <a src="https://github.com/Amandabru/VCLeadGenerator.git" target='_blank'>
+                    <FaGithubSquare className="icon" size={30} color="#235347" style={{cursor: 'pointer'}}/>
+                </a>
+            </div>
             <h1 className="title">
                 Team
             </h1>
